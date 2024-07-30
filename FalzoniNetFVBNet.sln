@@ -1,0 +1,98 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35027.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{C10424F6-05A9-4A72-9240-F53B899F897A}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FalzoniNetFVBNet.Domain", "src\FalzoniNetFVBNet.Domain\FalzoniNetFVBNet.Domain.vbproj", "{306428F1-8FE7-4653-BA0C-46CADE078285}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infra", "Infra", "{19A5C5A2-5E61-412C-8F73-1CF7DA572389}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FalzoniNetFVBNet.Infra.Data", "src\FalzoniNetFVBNet.Infra.Data\FalzoniNetFVBNet.Infra.Data.vbproj", "{86B8CCE9-D273-48EE-9266-DE3A10C76A68}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utils", "Utils", "{0963AC87-649D-43BA-A9DE-890FDC0B0013}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FalzoniNetFVBNet.Utils", "src\FalzoniNetFVBNet.Utils\FalzoniNetFVBNet.Utils.vbproj", "{287EC006-6F4E-43BF-98E3-ADB72921446B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{3AF4F4D3-CF27-4C23-ABDE-3742D3A46574}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FalzoniNetFVBNet.Service", "src\FalzoniNetFVBNet.Service\FalzoniNetFVBNet.Service.vbproj", "{5A968084-5563-4B87-BF6F-7208B9A957A9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{6A9585FE-3E69-48BD-9D43-29FE66B96DCE}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FalzoniNetFVBNet.Application", "src\FalzoniNetFVBNet.Application\FalzoniNetFVBNet.Application.vbproj", "{A0BF081E-8593-4DD7-ABB1-CA149C81CEE7}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FalzoniNetFVBNet.Infra.IoC", "src\FalzoniNetFVBNet.Infra.IoC\FalzoniNetFVBNet.Infra.IoC.vbproj", "{63ABE4D1-147B-4876-8EBE-EC5A8D294686}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{023C743D-9204-4DE2-82E6-B6677C801611}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FalzoniNetFVBNet.Presentation.Api", "src\FalzoniNetFVBNet.Presentation.Api\FalzoniNetFVBNet.Presentation.Api.vbproj", "{DDC358EC-0B15-44F5-A914-F93D7F61849B}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FalzoniNetFVBNet.Presentation.Administrator", "src\FalzoniNetFVBNet.Presentation.Administrator\FalzoniNetFVBNet.Presentation.Administrator.vbproj", "{6984CAD0-B106-4DC8-B1C2-D06277AF462C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{543F933A-C4FB-4042-B484-2F2734583F3A}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FalzoniNetFVBNet.Resources", "src\FalzoniNetFVBNet.Resources\FalzoniNetFVBNet.Resources.vbproj", "{7E62BDBC-2BE7-4EFB-A90F-7613026BB524}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{306428F1-8FE7-4653-BA0C-46CADE078285}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{306428F1-8FE7-4653-BA0C-46CADE078285}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{306428F1-8FE7-4653-BA0C-46CADE078285}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{306428F1-8FE7-4653-BA0C-46CADE078285}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86B8CCE9-D273-48EE-9266-DE3A10C76A68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86B8CCE9-D273-48EE-9266-DE3A10C76A68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86B8CCE9-D273-48EE-9266-DE3A10C76A68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86B8CCE9-D273-48EE-9266-DE3A10C76A68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{287EC006-6F4E-43BF-98E3-ADB72921446B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{287EC006-6F4E-43BF-98E3-ADB72921446B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{287EC006-6F4E-43BF-98E3-ADB72921446B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{287EC006-6F4E-43BF-98E3-ADB72921446B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A968084-5563-4B87-BF6F-7208B9A957A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A968084-5563-4B87-BF6F-7208B9A957A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A968084-5563-4B87-BF6F-7208B9A957A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A968084-5563-4B87-BF6F-7208B9A957A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0BF081E-8593-4DD7-ABB1-CA149C81CEE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0BF081E-8593-4DD7-ABB1-CA149C81CEE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0BF081E-8593-4DD7-ABB1-CA149C81CEE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0BF081E-8593-4DD7-ABB1-CA149C81CEE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63ABE4D1-147B-4876-8EBE-EC5A8D294686}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63ABE4D1-147B-4876-8EBE-EC5A8D294686}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63ABE4D1-147B-4876-8EBE-EC5A8D294686}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63ABE4D1-147B-4876-8EBE-EC5A8D294686}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDC358EC-0B15-44F5-A914-F93D7F61849B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDC358EC-0B15-44F5-A914-F93D7F61849B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDC358EC-0B15-44F5-A914-F93D7F61849B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDC358EC-0B15-44F5-A914-F93D7F61849B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6984CAD0-B106-4DC8-B1C2-D06277AF462C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6984CAD0-B106-4DC8-B1C2-D06277AF462C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6984CAD0-B106-4DC8-B1C2-D06277AF462C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6984CAD0-B106-4DC8-B1C2-D06277AF462C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E62BDBC-2BE7-4EFB-A90F-7613026BB524}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E62BDBC-2BE7-4EFB-A90F-7613026BB524}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E62BDBC-2BE7-4EFB-A90F-7613026BB524}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E62BDBC-2BE7-4EFB-A90F-7613026BB524}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{306428F1-8FE7-4653-BA0C-46CADE078285} = {C10424F6-05A9-4A72-9240-F53B899F897A}
+		{86B8CCE9-D273-48EE-9266-DE3A10C76A68} = {19A5C5A2-5E61-412C-8F73-1CF7DA572389}
+		{287EC006-6F4E-43BF-98E3-ADB72921446B} = {0963AC87-649D-43BA-A9DE-890FDC0B0013}
+		{5A968084-5563-4B87-BF6F-7208B9A957A9} = {3AF4F4D3-CF27-4C23-ABDE-3742D3A46574}
+		{A0BF081E-8593-4DD7-ABB1-CA149C81CEE7} = {6A9585FE-3E69-48BD-9D43-29FE66B96DCE}
+		{63ABE4D1-147B-4876-8EBE-EC5A8D294686} = {19A5C5A2-5E61-412C-8F73-1CF7DA572389}
+		{DDC358EC-0B15-44F5-A914-F93D7F61849B} = {023C743D-9204-4DE2-82E6-B6677C801611}
+		{6984CAD0-B106-4DC8-B1C2-D06277AF462C} = {023C743D-9204-4DE2-82E6-B6677C801611}
+		{7E62BDBC-2BE7-4EFB-A90F-7613026BB524} = {543F933A-C4FB-4042-B484-2F2734583F3A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {03CC5776-058D-45DF-B034-220BEF5291E6}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,17 @@
+2024-07-30 13:40:07.8277|FATAL|FalzoniNetFVBNet.Presentation.Administrator.Controllers.AccountController|11|Erro fatal!|System.Net.Http.HttpRequestException: Ocorreu um erro ao enviar a solicitação. ---> System.Net.WebException: Impossível conectar-se ao servidor remoto ---> System.Net.Sockets.SocketException: Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente 127.0.0.1:44381
+   em System.Net.Sockets.Socket.InternalEndConnect(IAsyncResult asyncResult)
+   em System.Net.Sockets.Socket.EndConnect(IAsyncResult asyncResult)
+   em System.Net.ServicePoint.ConnectSocketInternal(Boolean connectFailure, Socket s4, Socket s6, Socket& socket, IPAddress& address, ConnectSocketState state, IAsyncResult asyncResult, Exception& exception)
+   --- Fim do rastreamento de pilha de exceções internas ---
+   em System.Net.HttpWebRequest.EndGetResponse(IAsyncResult asyncResult)
+   em System.Net.Http.HttpClientHandler.GetResponseCallback(IAsyncResult ar)
+   --- Fim do rastreamento de pilha de exceções internas ---
+   em System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   em System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   em System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   em FalzoniNetFVBNet.Presentation.Administrator.Clients.Identity.AccountClient.VB$StateMachine_3_Logout.MoveNext() na F:\Users\Renato Falzoni\Documents\Pessoal\Projetos\VB.NET\.NET Framework\FalzoniNetFVBNet\src\FalzoniNetFVBNet.Presentation.Administrator\Clients\Identity\AccountClient.vb:linha 112
+--- Fim do rastreamento de pilha do local anterior onde a exceção foi gerada ---
+   em System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   em System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   em System.Runtime.CompilerServices.TaskAwaiter.GetResult()
+   em FalzoniNetFVBNet.Presentation.Administrator.Controllers.AccountController.VB$StateMachine_7_LogOut.MoveNext() na F:\Users\Renato Falzoni\Documents\Pessoal\Projetos\VB.NET\.NET Framework\FalzoniNetFVBNet\src\FalzoniNetFVBNet.Presentation.Administrator\Controllers\AccountController.vb:linha 77
