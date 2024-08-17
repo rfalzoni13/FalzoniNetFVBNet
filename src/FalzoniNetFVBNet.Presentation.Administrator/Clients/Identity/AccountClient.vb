@@ -1,4 +1,5 @@
-﻿Imports System.Net.Http
+﻿Imports System.Net
+Imports System.Net.Http
 Imports System.Security.Claims
 Imports System.Threading.Tasks
 Imports FalzoniNetFVBNet.Presentation.Administrator.Models.Common
@@ -49,9 +50,14 @@ Namespace Clients.Identity
 
                     request.GetOwinContext().Authentication.SignIn(options, identity)
                 Else
-                    Dim errorResponse = response.Content.ReadAsAsync(Of ResponseErrorLogin)().Result
+                    Select Case response.StatusCode
+                        Case HttpStatusCode.NotFound
+                            Throw New ApplicationException("Caminho ou serviço não encontrado")
+                        Case Else
+                            Dim statusCode As StatusCodeModel = response.Content.ReadAsAsync(Of StatusCodeModel).Result
 
-                    Throw New ApplicationException(If(Not String.IsNullOrEmpty(errorResponse.error_description), errorResponse.error_description, errorResponse.[error]))
+                            Throw New ApplicationException(statusCode.Message)
+                    End Select
                 End If
             End Using
         End Function
@@ -100,7 +106,14 @@ Namespace Clients.Identity
 
                     HttpContext.Current.GetOwinContext().Authentication.SignIn(options, identity)
                 Else
-                    Throw New ApplicationException("Login e/ou Senha incorretos!")
+                    Select Case response.StatusCode
+                        Case HttpStatusCode.NotFound
+                            Throw New ApplicationException("Caminho ou serviço não encontrado")
+                        Case Else
+                            Dim errorResponse As ResponseErrorLogin = response.Content.ReadAsAsync(Of ResponseErrorLogin).Result
+
+                            Throw New ApplicationException(If(Not String.IsNullOrEmpty(errorResponse.error_description), errorResponse.error_description, errorResponse.error))
+                    End Select
                 End If
             End Using
         End Function
