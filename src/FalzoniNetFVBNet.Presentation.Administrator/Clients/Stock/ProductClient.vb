@@ -9,10 +9,10 @@ Imports FalzoniNetFVBNet.Utils.Helpers
 
 Namespace Clients.Stock
     Public Class ProductClient
-        Inherits BaseClient(Of ProductModel, ProductTableModel)
+        Inherits BaseClient(Of ProductModel)
         Implements IProductClient
 
-        Public Overrides Async Function GetTableAsync(url As String) As Task(Of ProductTableModel)
+        Public Async Function GetTableAsync(url As String) As Task(Of ProductTableModel) Implements IProductClient.GetTableAsync
             Dim table = New ProductTableModel()
 
             Try

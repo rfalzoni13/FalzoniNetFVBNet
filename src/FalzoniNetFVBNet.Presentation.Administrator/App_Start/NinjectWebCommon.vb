@@ -54,7 +54,7 @@ Public NotInheritable Class NinjectWebCommon
     ''' <param name="kernel">The kernel.</param>
     Private Shared Sub RegisterServices(kernel As IKernel)
         ' Dependency Injection of Client's Restful interfaces
-        kernel.Bind(GetType(IBaseClient(Of,)), GetType(BaseClient(Of,)))
+        kernel.Bind(GetType(IBaseClient(Of)), GetType(BaseClient(Of)))
 
         kernel.Bind(Of IRoleClient)().To(Of RoleClient)().InRequestScope()
         kernel.Bind(Of IUserClient)().To(Of UserClient)().InRequestScope()

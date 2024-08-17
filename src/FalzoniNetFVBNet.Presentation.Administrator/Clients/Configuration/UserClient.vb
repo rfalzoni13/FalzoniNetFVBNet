@@ -1,16 +1,16 @@
 ﻿Imports System.Net.Http
 Imports System.Threading.Tasks
 Imports FalzoniNetFVBNet.Presentation.Administrator.Clients.Base
-Imports FalzoniNetFVBNet.Presentation.Administrator.Models.Common
-Imports FalzoniNetFVBNet.Presentation.Administrator.Models.Identity
-Imports FalzoniNetFVBNet.Presentation.Administrator.Models.Configuration
-Imports FalzoniNetFVBNet.Presentation.Administrator.Models.Tables.Configuration
 Imports FalzoniNetFVBNet.Presentation.Administrator.Clients.Interfaces.Configuration
+Imports FalzoniNetFVBNet.Presentation.Administrator.Models.Common
+Imports FalzoniNetFVBNet.Presentation.Administrator.Models.Configuration
+Imports FalzoniNetFVBNet.Presentation.Administrator.Models.Identity
+Imports FalzoniNetFVBNet.Presentation.Administrator.Models.Tables.Configuration
 Imports FalzoniNetFVBNet.Utils.Helpers
 
 Namespace Clients.Register
     Public Class UserClient
-        Inherits BaseClient(Of UserModel, UserTableModel)
+        Inherits BaseClient(Of UserModel)
         Implements IUserClient
 
         Public Sub New()
@@ -36,7 +36,7 @@ Namespace Clients.Register
             End Using
         End Function
 
-        Public Overrides Async Function GetTableAsync(url As String) As Task(Of UserTableModel)
+        Public Async Function GetTableAsync(url As String) As Task(Of UserTableModel) Implements IUserClient.GetTableAsync
             Dim table = New UserTableModel()
 
             Try

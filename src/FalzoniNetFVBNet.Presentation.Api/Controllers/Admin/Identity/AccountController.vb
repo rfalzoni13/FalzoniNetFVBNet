@@ -1,8 +1,16 @@
 ﻿Imports System.Net
 Imports System.Net.Http
+Imports System.Threading.Tasks
 Imports System.Web.Http
-Imports FalzoniNetFVBNet.Application.ServiceApplication.Configuration
+Imports System.Web.Http.Results
+Imports FalzoniNetFVBNet.Application.IdentityConfiguration
+Imports FalzoniNetFVBNet.Application.ServiceApplication.Identity
+Imports FalzoniNetFVBNet.Presentation.Api.Models.Identity
 Imports FalzoniNetFVBNet.Presentation.Api.Utils
+Imports FalzoniNetFVBNet.Utils.Helpers
+Imports Microsoft.AspNet.Identity
+Imports Microsoft.Owin.Security
+Imports Microsoft.Owin.Security.Cookies
 Imports NLog
 
 Namespace Controllers.Admin.Identity
@@ -11,121 +19,214 @@ Namespace Controllers.Admin.Identity
         Inherits ApiController
 #Region "Attributes"
         Private Shared ReadOnly _logger As Logger = LogManager.GetCurrentClassLogger()
-        Private ReadOnly _roleServiceApplication As RoleServiceApplication
+        Private ReadOnly _accountServiceApplication As AccountServiceApplication
 #End Region
 
 #Region "Constructor"
-        Public Sub New(roleServiceApplication As RoleServiceApplication)
-            _roleServiceApplication = roleServiceApplication
+        Public Sub New(accountServiceApplication As AccountServiceApplication)
+            _accountServiceApplication = accountServiceApplication
         End Sub
 #End Region
 
-#Region "Getters"
-        ' GET Api/Role/GelAllNames
+#Region "Logout"
+        ' POST Api/Account/Logout
         ''' <summary>
-        ''' Listar nomes de Acessos
+        ''' Logout
         ''' </summary>
-        ''' <response code="401">Unauthorized</response>
-        ''' <response code="404">Not Found</response>
         ''' <response code="500">Internal Server Error</response>
-        ''' <remarks>Listagem de todos os acessos pelos nomes</remarks>
+        ''' <remarks>Deslogar do Sistema</remarks>
         ''' <returns></returns>
-        <HttpGet>
+        <HttpPost>
         <Route("GelAllNames")>
         Public Function GelAllNames() As HttpResponseMessage
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try
-                Dim retorno = _roleServiceApplication.GelAllNames()
-                If retorno IsNot Nothing And retorno.Count() > 0 Then
-                    _logger.Info(action + " - Sucesso!")
+                _logger.Info(action + " - Iniciado")
 
-                    _logger.Info(action + " - Finalizado")
-                    Return Request.CreateResponse(HttpStatusCode.OK, retorno)
-                Else
-                    Throw New HttpResponseException(HttpStatusCode.NotFound)
-                End If
-            Catch ex As HttpResponseException
-                If ex.Response.StatusCode = HttpStatusCode.NotFound Then
-                    Return ResponseManager.ReturnExceptionNotFound(ex, Request, _logger, action, "Nenhum registro encontrado!")
-                End If
+                ApplicationOAuthProvider.Logout(Request.GetOwinContext(), CookieAuthenticationDefaults.AuthenticationType)
 
-                Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
+                _logger.Info(action + " - Finalizado")
+                Return Request.CreateResponse(HttpStatusCode.OK)
             Catch ex As Exception
                 Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
             End Try
         End Function
+#End Region
 
-        ' GET Api/Role/GetAll
+#Region "External Logins"
+        ' GET Api/Account/ExternalLogin
         ''' <summary>
-        ''' Listar todos os acessos
-        ''' </summary>
-        ''' <response code="401">Unauthorized</response>
-        ''' <response code="404">Not Found</response>
-        ''' <response code="500">Internal Server Error</response>
-        ''' <remarks>Listagem de todos os acessos</remarks>
-        ''' <returns></returns>
-        <HttpGet>
-        <Route("GetAll")>
-        Public Function GetAll() As HttpResponseMessage
-            Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
-            Try
-                Dim retorno = _roleServiceApplication.GetAll()
-                If retorno IsNot Nothing And retorno.Count() > 0 Then
-                    _logger.Info(action + " - Sucesso!")
-
-                    _logger.Info(action + " - Finalizado")
-                    Return Request.CreateResponse(HttpStatusCode.OK, retorno)
-                Else
-                    Throw New HttpResponseException(HttpStatusCode.NotFound)
-                End If
-            Catch ex As HttpResponseException
-                If ex.Response.StatusCode = HttpStatusCode.NotFound Then
-                    Return ResponseManager.ReturnExceptionNotFound(ex, Request, _logger, action, "Nenhum registro encontrado!")
-                End If
-
-                Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
-            Catch ex As Exception
-                Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
-            End Try
-        End Function
-
-        ' GET Api/Role/Get?id={Id}
-        ''' <summary>
-        ''' Listar usuário pelo Id
+        ''' Login Externo
         ''' </summary>
         ''' <response code="400">Bad Request</response>
         ''' <response code="401">Unauthorized</response>
-        ''' <response code="404">Not Found</response>
         ''' <response code="500">Internal Server Error</response>
-        ''' <remarks>Retorna o usuário através do Id do mesmo</remarks>
-        ''' <param name="Id">Id do usuário</param>
+        ''' <param name="provider"></param>
+        ''' <param name="error"></param>
+        ''' <remarks>Efetuar login com provedores externos</remarks>
         ''' <returns></returns>
+        <OverrideAuthentication>
+        <HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)>
         <HttpGet>
-        <Route("Get")>
-        Public Function [Get](Id As Guid) As HttpResponseMessage
+        <Route("ExternalLogin", Name:="ExternalLogin")>
+        Public Async Function ExternalLogin(provider As String, Optional [error] As String = Nothing) As Task(Of HttpResponseMessage)
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try
-                If Id <> Nothing Then
-                    Dim role = _roleServiceApplication.Get(Id)
+                _logger.Info(action + " - Iniciado")
 
-                    If role IsNot Nothing Then
-
-                        _logger.Info(action + " - Sucesso!")
-
-                        _logger.Info(action + " - Finalizado")
-                        Return Request.CreateResponse(HttpStatusCode.OK, role)
-                    Else
-                        Throw New HttpResponseException(HttpStatusCode.NotFound)
-                    End If
-                Else
-                    Return ResponseManager.ReturnBadRequest(Request, _logger, action, "Parâmetro incorreto!")
-                End If
-            Catch ex As HttpResponseException
-                If ex.Response.StatusCode = HttpStatusCode.NotFound Then
-                    Return ResponseManager.ReturnExceptionNotFound(ex, Request, _logger, action, "Nenhum registro encontrado!")
+                If [error] IsNot Nothing Then
+                    Throw New Exception([error])
                 End If
 
+                If Not User.Identity.IsAuthenticated Then
+                    Return New ChallengeResult(provider, Me)
+                End If
+
+                Await ApplicationOAuthProvider.ExternalLogin(Request.GetOwinContext(), User, provider)
+                Return Request.CreateResponse(HttpStatusCode.OK)
+            Catch ex As UnauthorizedAccessException
+                Return ResponseManager.ReturnBadRequest(ex, Request, _logger, action)
+            Catch ex As ApplicationException
+                Return ResponseManager.ReturnBadRequest(ex, Request, _logger, action)
+            Catch ex As Exception
                 Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
+            End Try
+        End Function
+
+        ' GET Api/Account/ExternalLogin
+        ''' <summary>
+        ''' Obter Logins Externos
+        ''' </summary>
+        ''' <response code="500">Internal Server Error</response>
+        ''' <param name="returnUrl"></param>
+        ''' <param name="generateState"></param>
+        ''' <remarks>Efetuar login com provedores externos</remarks>
+        ''' <returns></returns>
+        <OverrideAuthentication>
+        <HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)>
+        <HttpGet>
+        <Route("GetExternalLogins")>
+        Public Function GetExternalLogins(returnUrl As String, Optional generateState As Boolean = False) As HttpResponseMessage
+            Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
+            Try
+                _logger.Info(action + " - Iniciado")
+
+                Dim descriptions As IEnumerable(Of AuthenticationDescription) = ApplicationOAuthProvider.GetExternalAuthenticationTypes(Request.GetOwinContext())
+                Dim logins As List(Of ExternalLoginModel) = New List(Of ExternalLoginModel)
+
+                Dim state As String
+
+                If generateState Then
+                    Const strengthInBits As Int32 = 256
+                    state = RandomOAuthStateGeneratorHelper.Generate(strengthInBits)
+                Else
+                    state = Nothing
+                End If
+
+                For Each description As AuthenticationDescription In descriptions
+                    Dim login As ExternalLoginModel = New ExternalLoginModel With
+                    {
+                        .Name = description.Caption,
+                        .Url = Url.Route("ExternalLogin", New With
+                        {
+                            .provider = description.AuthenticationType,
+                            .response_type = "token",
+                            .client_id = AppBuilderConfiguration.PublicClientId,
+                            .redirect_uri = New Uri(Request.RequestUri, returnUrl).AbsoluteUri,
+                            .state = state
+                        }),
+                        .State = state
+                    }
+                    logins.Add(login)
+                Next
+
+                Return Request.CreateResponse(HttpStatusCode.OK, logins)
+            Catch ex As Exception
+                Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
+            End Try
+        End Function
+
+        ' POST Api/Account/AddExternalLogin
+        ''' <summary>
+        ''' Adicionar Login Externo
+        ''' </summary>
+        ''' <response code="400">Bad Request</response>
+        ''' <response code="500">Internal Server Error</response>
+        ''' <param name="model"></param>
+        ''' <remarks>Adiciona login externo</remarks>
+        ''' <returns></returns>
+        <HttpPost>
+        <Route("AddExternalLogin")>
+        Public Async Function AddExternalLogin(model As AddExternalLoginBindingModel) As Task(Of HttpResponseMessage)
+            Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
+            Try
+                _logger.Info(action + " - Iniciado")
+
+                ApplicationOAuthProvider.Logout(Request.GetOwinContext(), DefaultAuthenticationTypes.ExternalCookie)
+
+                Dim result = Await _accountServiceApplication.AddExternalLoginAsync(User.Identity.GetUserId(), model.ExternalAccessToken)
+
+                If Not result.Succeeded Then
+                    Return ResponseManager.ReturnErrorResult(Request, _logger, action, result.Errors)
+                End If
+
+                Return Request.CreateResponse(HttpStatusCode.OK, result)
+            Catch ex As Exception
+                Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
+            End Try
+        End Function
+
+        ' POST Api/Account/AddExternalUserLogin
+        ''' <summary>
+        ''' Adicionar Usuário ao Login Externo
+        ''' </summary>
+        ''' <response code="400">Bad Request</response>
+        ''' <response code="500">Internal Server Error</response>
+        ''' <param name="model"></param>
+        ''' <remarks>Adiciona usuário ao provedor de login externo</remarks>
+        ''' <returns></returns>
+        <HttpPost>
+        <Route("AddExternalUserLogin")>
+        Public Async Function AddExternalUserLogin(model As RegisterExternalBindingModel) As Task(Of HttpResponseMessage)
+            Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
+            Try
+                _logger.Info(action + " - Iniciado")
+
+                Dim result = Await ApplicationOAuthProvider.RegisterExternal(Request.GetOwinContext(), model.Email, model.Email)
+
+                If Not result.Succeeded Then
+                    Return ResponseManager.ReturnErrorResult(Request, _logger, action, result.Errors)
+                End If
+
+                Return Request.CreateResponse(HttpStatusCode.OK, result)
+            Catch ex As Exception
+                Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
+            End Try
+        End Function
+
+        ' POST Api/Account/RemoveExternalLogin
+        ''' <summary>
+        ''' Remover Login Externo
+        ''' </summary>
+        ''' <response code="400">Bad Request</response>
+        ''' <response code="500">Internal Server Error</response>
+        ''' <param name="model"></param>
+        ''' <remarks>Remove provedor de login externo</remarks>
+        ''' <returns></returns>
+        <HttpPost>
+        <Route("RemoveExternalLogin")>
+        Public Async Function RemoveExternalLogin(model As RemoveLoginBindingModel) As Task(Of HttpResponseMessage)
+            Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
+            Try
+                _logger.Info(action + " - Iniciado")
+
+                Dim result = Await _accountServiceApplication.RemoveExternalLoginAsync(User.Identity.GetUserId(), model.LoginProvider, model.ProviderKey)
+
+                If Not result.Succeeded Then
+                    Return ResponseManager.ReturnErrorResult(Request, _logger, action, result.Errors)
+                End If
+
+                Return Request.CreateResponse(HttpStatusCode.OK, result)
             Catch ex As Exception
                 Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
             End Try

@@ -28,7 +28,6 @@ Namespace Controllers.Admin.Configuration
         ''' Listar nomes de Acessos
         ''' </summary>
         ''' <response code="401">Unauthorized</response>
-        ''' <response code="404">Not Found</response>
         ''' <response code="500">Internal Server Error</response>
         ''' <remarks>Listagem de todos os acessos pelos nomes</remarks>
         ''' <returns></returns>
@@ -37,21 +36,15 @@ Namespace Controllers.Admin.Configuration
         Public Function GelAllNames() As HttpResponseMessage
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try
+                _logger.Info(action + " - Iniciado")
+
                 Dim retorno = _roleServiceApplication.GelAllNames()
-                If retorno IsNot Nothing And retorno.Count() > 0 Then
-                    _logger.Info(action + " - Sucesso!")
 
-                    _logger.Info(action + " - Finalizado")
-                    Return Request.CreateResponse(HttpStatusCode.OK, retorno)
-                Else
-                    Throw New HttpResponseException(HttpStatusCode.NotFound)
-                End If
-            Catch ex As HttpResponseException
-                If ex.Response.StatusCode = HttpStatusCode.NotFound Then
-                    Return ResponseManager.ReturnExceptionNotFound(ex, Request, _logger, action, "Nenhum registro encontrado!")
-                End If
+                _logger.Info(action + " - Sucesso!")
 
-                Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
+                _logger.Info(action + " - Finalizado")
+                Return Request.CreateResponse(HttpStatusCode.OK, retorno)
+
             Catch ex As Exception
                 Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
             End Try
@@ -62,7 +55,6 @@ Namespace Controllers.Admin.Configuration
         ''' Listar todos os acessos
         ''' </summary>
         ''' <response code="401">Unauthorized</response>
-        ''' <response code="404">Not Found</response>
         ''' <response code="500">Internal Server Error</response>
         ''' <remarks>Listagem de todos os acessos</remarks>
         ''' <returns></returns>
@@ -71,21 +63,12 @@ Namespace Controllers.Admin.Configuration
         Public Function GetAll() As HttpResponseMessage
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try
+                _logger.Info(action + " - Iniciado")
                 Dim retorno = _roleServiceApplication.GetAll()
-                If retorno IsNot Nothing And retorno.Count() > 0 Then
-                    _logger.Info(action + " - Sucesso!")
+                _logger.Info(action + " - Sucesso!")
 
-                    _logger.Info(action + " - Finalizado")
-                    Return Request.CreateResponse(HttpStatusCode.OK, retorno)
-                Else
-                    Throw New HttpResponseException(HttpStatusCode.NotFound)
-                End If
-            Catch ex As HttpResponseException
-                If ex.Response.StatusCode = HttpStatusCode.NotFound Then
-                    Return ResponseManager.ReturnExceptionNotFound(ex, Request, _logger, action, "Nenhum registro encontrado!")
-                End If
-
-                Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
+                _logger.Info(action + " - Finalizado")
+                Return Request.CreateResponse(HttpStatusCode.OK, retorno)
             Catch ex As Exception
                 Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
             End Try
@@ -97,7 +80,6 @@ Namespace Controllers.Admin.Configuration
         ''' </summary>
         ''' <response code="400">Bad Request</response>
         ''' <response code="401">Unauthorized</response>
-        ''' <response code="404">Not Found</response>
         ''' <response code="500">Internal Server Error</response>
         ''' <remarks>Retorna o usuário através do Id do mesmo</remarks>
         ''' <param name="Id">Id do usuário</param>
@@ -107,27 +89,21 @@ Namespace Controllers.Admin.Configuration
         Public Function [Get](Id As Guid) As HttpResponseMessage
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try
-                If Id <> Nothing Then
-                    Dim role = _roleServiceApplication.Get(Id)
+                _logger.Info(action + " - Iniciado")
 
-                    If role IsNot Nothing Then
-
-                        _logger.Info(action + " - Sucesso!")
-
-                        _logger.Info(action + " - Finalizado")
-                        Return Request.CreateResponse(HttpStatusCode.OK, role)
-                    Else
-                        Throw New HttpResponseException(HttpStatusCode.NotFound)
-                    End If
-                Else
-                    Return ResponseManager.ReturnBadRequest(Request, _logger, action, "Parâmetro incorreto!")
-                End If
-            Catch ex As HttpResponseException
-                If ex.Response.StatusCode = HttpStatusCode.NotFound Then
-                    Return ResponseManager.ReturnExceptionNotFound(ex, Request, _logger, action, "Nenhum registro encontrado!")
+                If Guid.Equals(Id, Guid.Empty) Then
+                    Throw New ApplicationException("Parâmetro inválido")
                 End If
 
-                Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
+                Dim role = _roleServiceApplication.Get(Id)
+
+
+                _logger.Info(action + " - Sucesso!")
+
+                _logger.Info(action + " - Finalizado")
+                Return Request.CreateResponse(HttpStatusCode.OK, role)
+            Catch ex As ApplicationException
+                Return ResponseManager.ReturnBadRequest(ex, Request, _logger, action)
             Catch ex As Exception
                 Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
             End Try

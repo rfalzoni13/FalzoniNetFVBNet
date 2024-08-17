@@ -46,7 +46,6 @@ Namespace Controllers.Admin.Identity
                 Return Request.CreateResponse(HttpStatusCode.OK, userFactors)
 
             Catch ex As Exception
-                _logger.Fatal(ex, "Erro fatal!")
                 Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
             End Try
         End Function
@@ -81,7 +80,6 @@ Namespace Controllers.Admin.Identity
                 Return Request.CreateResponse(System.Net.HttpStatusCode.OK, "Código enviado com sucesso!")
 
             Catch ex As Exception
-                _logger.Fatal(ex, "Erro fatal!")
                 Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
             End Try
         End Function
@@ -122,7 +120,6 @@ Namespace Controllers.Admin.Identity
                 Return Request.CreateResponse(System.Net.HttpStatusCode.OK, retornoCodigo)
 
             Catch ex As Exception
-                _logger.Fatal(ex, "Erro fatal!")
                 Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
             End Try
         End Function
@@ -159,8 +156,6 @@ Namespace Controllers.Admin.Identity
                 Return Request.CreateResponse(System.Net.HttpStatusCode.OK, "Código enviado com sucesso!")
 
             Catch ex As Exception
-
-                _logger.Fatal(ex, "Erro fatal!")
                 Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
             End Try
         End Function
@@ -195,8 +190,6 @@ Namespace Controllers.Admin.Identity
                 Return Request.CreateResponse(System.Net.HttpStatusCode.OK, "Código enviado com sucesso!")
 
             Catch ex As Exception
-
-                _logger.Fatal(ex, "Erro fatal!")
                 Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
             End Try
         End Function
@@ -234,7 +227,6 @@ Namespace Controllers.Admin.Identity
                 Return Request.CreateResponse(System.Net.HttpStatusCode.OK, "Email confirmado com sucesso!")
 
             Catch ex As Exception
-                _logger.Fatal(ex, "Erro fatal!")
                 Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
             End Try
         End Function
@@ -274,7 +266,6 @@ Namespace Controllers.Admin.Identity
                 Return Request.CreateResponse(System.Net.HttpStatusCode.OK, "Telefone confirmado com sucesso!")
 
             Catch ex As Exception
-                _logger.Fatal(ex, "Erro fatal!")
                 Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
             End Try
         End Function

@@ -9,10 +9,10 @@ Imports FalzoniNetFVBNet.Utils.Helpers
 
 Namespace Clients.Register
     Public Class CustomerClient
-        Inherits BaseClient(Of CustomerModel, CustomerTableModel)
+        Inherits BaseClient(Of CustomerModel)
         Implements ICustomerClient
 
-        Public Overrides Async Function GetTableAsync(url As String) As Task(Of CustomerTableModel)
+        Public Async Function GetTableAsync(url As String) As Task(Of CustomerTableModel) Implements ICustomerClient.GetTableAsync
             Dim table = New CustomerTableModel()
 
             Try

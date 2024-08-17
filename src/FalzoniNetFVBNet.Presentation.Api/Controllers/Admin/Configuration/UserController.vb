@@ -30,7 +30,6 @@ Namespace Controllers.Admin.Configuration
         ''' Listar todos os usuarios
         ''' </summary>
         ''' <response code="401">Unauthorized</response>
-        ''' <response code="404">Not Found</response>
         ''' <response code="500">Internal Server Error</response>
         ''' <remarks>Listagem de todos os usuarios</remarks>
         ''' <returns></returns>
@@ -39,21 +38,15 @@ Namespace Controllers.Admin.Configuration
         Public Function GetAll() As HttpResponseMessage
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try
+                _logger.Info(action + " - Iniciado")
+
                 Dim retorno = _userServiceApplication.GetAll()
-                If retorno IsNot Nothing And retorno.Count() > 0 Then
-                    _logger.Info(action + " - Sucesso!")
 
-                    _logger.Info(action + " - Finalizado")
-                    Return Request.CreateResponse(HttpStatusCode.OK, retorno)
-                Else
-                    Throw New HttpResponseException(HttpStatusCode.NotFound)
-                End If
-            Catch ex As HttpResponseException
-                If ex.Response.StatusCode = HttpStatusCode.NotFound Then
-                    Return ResponseManager.ReturnExceptionNotFound(ex, Request, _logger, action, "Nenhum registro encontrado!")
-                End If
+                _logger.Info(action + " - Sucesso!")
 
-                Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
+                _logger.Info(action + " - Finalizado")
+                Return Request.CreateResponse(HttpStatusCode.OK, retorno)
+
             Catch ex As Exception
                 Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
             End Try
@@ -65,7 +58,6 @@ Namespace Controllers.Admin.Configuration
         ''' </summary>
         ''' <response code="400">Bad Request</response>
         ''' <response code="401">Unauthorized</response>
-        ''' <response code="404">Not Found</response>
         ''' <response code="500">Internal Server Error</response>
         ''' <remarks>Retorna o usuário através do Id do mesmo</remarks>
         ''' <param name="Id">Id do usuário</param>
@@ -75,27 +67,20 @@ Namespace Controllers.Admin.Configuration
         Public Function [Get](Id As Guid) As HttpResponseMessage
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try
-                If Id <> Nothing Then
-                    Dim usuario = _userServiceApplication.Get(Id)
+                _logger.Info(action + " - Iniciado")
 
-                    If usuario IsNot Nothing Then
-
-                        _logger.Info(action + " - Sucesso!")
-
-                        _logger.Info(action + " - Finalizado")
-                        Return Request.CreateResponse(HttpStatusCode.OK, usuario)
-                    Else
-                        Throw New HttpResponseException(HttpStatusCode.NotFound)
-                    End If
-                Else
-                    Return ResponseManager.ReturnBadRequest(Request, _logger, action, "Parâmetro incorreto!")
-                End If
-            Catch ex As HttpResponseException
-                If ex.Response.StatusCode = HttpStatusCode.NotFound Then
-                    Return ResponseManager.ReturnExceptionNotFound(ex, Request, _logger, action, "Nenhum registro encontrado!")
+                If Guid.Equals(Id, Guid.Empty) Then
+                    Throw New ApplicationException("Parâmetro inválido")
                 End If
 
-                Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
+                Dim user = _userServiceApplication.Get(Id)
+
+                _logger.Info(action + " - Sucesso!")
+
+                _logger.Info(action + " - Finalizado")
+                Return Request.CreateResponse(HttpStatusCode.OK, user)
+            Catch ex As ApplicationException
+                Return ResponseManager.ReturnBadRequest(ex, Request, _logger, action)
             Catch ex As Exception
                 Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
             End Try
@@ -109,7 +94,6 @@ Namespace Controllers.Admin.Configuration
         ''' </summary>
         ''' <response code="400">Bad Request</response>
         ''' <response code="401">Unauthorized</response>
-        ''' <response code="404">Not Found</response>
         ''' <response code="500">Internal Server Error</response>
         ''' <remarks>Insere um novo usuário passando um objeto no body da requisição no método POST</remarks>
         ''' <param name="applicationUserRegisterModel">Objeto de registro usuário</param>
@@ -133,14 +117,10 @@ Namespace Controllers.Admin.Configuration
 
                     Return Request.CreateResponse(HttpStatusCode.Created, "Usuário incluído com sucesso!")
                 Else
-                    Return ResponseManager.ReturnBadRequest(Request, _logger, action, "Por favor, preencha os campos corretamente!")
+                    Throw New ApplicationException("Por favor, preencha os campos corretamente!")
                 End If
-            Catch ex As HttpResponseException
-                If ex.Response.StatusCode = HttpStatusCode.NotFound Then
-                    Return ResponseManager.ReturnExceptionNotFound(ex, Request, _logger, action, "Nenhum registro encontrado!")
-                End If
-
-                Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
+            Catch ex As ApplicationException
+                Return ResponseManager.ReturnBadRequest(ex, Request, _logger, action)
             Catch ex As Exception
                 Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
             End Try
@@ -152,7 +132,6 @@ Namespace Controllers.Admin.Configuration
         ''' </summary>
         ''' <response code="400">Bad Request</response>
         ''' <response code="401">Unauthorized</response>
-        ''' <response code="404">Not Found</response>
         ''' <response code="500">Internal Server Error</response>
         ''' <remarks>Insere um novo usuário passando um objeto no body da requisição no método POST de forma assíncrona</remarks>
         ''' <param name="applicationUserRegisterModel">Objeto de registro usuário</param>
@@ -176,14 +155,10 @@ Namespace Controllers.Admin.Configuration
 
                     Return Request.CreateResponse(HttpStatusCode.Created, "Usuário incluído com sucesso!")
                 Else
-                    Return ResponseManager.ReturnBadRequest(Request, _logger, action, "Por favor, preencha os campos corretamente!")
+                    Throw New ApplicationException("Por favor, preencha os campos corretamente!")
                 End If
-            Catch ex As HttpResponseException
-                If ex.Response.StatusCode = HttpStatusCode.NotFound Then
-                    Return ResponseManager.ReturnExceptionNotFound(ex, Request, _logger, action, "Nenhum registro encontrado!")
-                End If
-
-                Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
+            Catch ex As ApplicationException
+                Return ResponseManager.ReturnBadRequest(ex, Request, _logger, action)
             Catch ex As Exception
                 Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
             End Try
@@ -197,7 +172,6 @@ Namespace Controllers.Admin.Configuration
         ''' </summary>
         ''' <response code="400">Bad Request</response>
         ''' <response code="401">Unauthorized</response>
-        ''' <response code="404">Not Found</response>
         ''' <response code="500">Internal Server Error</response>
         ''' <remarks>Atualiza o usuário passando o objeto no body da requisição pelo método PUT</remarks>
         ''' <param name="applicationUserRegisterModel">Objeto de registro do usuário</param>
@@ -221,14 +195,10 @@ Namespace Controllers.Admin.Configuration
 
                     Return Request.CreateResponse(HttpStatusCode.OK, "Usuário atualizado com sucesso!")
                 Else
-                    Return ResponseManager.ReturnBadRequest(Request, _logger, action, "Por favor, preencha os campos corretamente!")
+                    Throw New ApplicationException("Por favor, preencha os campos corretamente!")
                 End If
-            Catch ex As HttpResponseException
-                If ex.Response.StatusCode = HttpStatusCode.NotFound Then
-                    Return ResponseManager.ReturnExceptionNotFound(ex, Request, _logger, action, "Nenhum registro encontrado!")
-                End If
-
-                Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
+            Catch ex As ApplicationException
+                Return ResponseManager.ReturnBadRequest(ex, Request, _logger, action)
             Catch ex As Exception
                 Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
             End Try
@@ -240,7 +210,6 @@ Namespace Controllers.Admin.Configuration
         ''' </summary>
         ''' <response code="400">Bad Request</response>
         ''' <response code="401">Unauthorized</response>
-        ''' <response code="404">Not Found</response>
         ''' <response code="500">Internal Server Error</response>
         ''' <remarks>Atualiza o usuário passando o objeto no body da requisição pelo método PUT de forma assíncrona</remarks>
         ''' <param name="applicationUserRegisterModel">Objeto de registro do usuário</param>
@@ -263,19 +232,14 @@ Namespace Controllers.Admin.Configuration
 
                     Return Request.CreateResponse(HttpStatusCode.OK, "Usuário atualizado com sucesso!")
                 Else
-                    Return ResponseManager.ReturnBadRequest(Request, _logger, action, "Por favor, preencha os campos corretamente!")
+                    Throw New ApplicationException("Por favor, preencha os campos corretamente!")
                 End If
-            Catch ex As HttpResponseException
-                If ex.Response.StatusCode = HttpStatusCode.NotFound Then
-                    Return ResponseManager.ReturnExceptionNotFound(ex, Request, _logger, action, "Nenhum registro encontrado!")
-                End If
-
-                Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
+            Catch ex As ApplicationException
+                Return ResponseManager.ReturnBadRequest(ex, Request, _logger, action)
             Catch ex As Exception
                 Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
             End Try
         End Function
-
 #End Region
 
 #Region "Delete User"
@@ -307,8 +271,10 @@ Namespace Controllers.Admin.Configuration
 
                     Return Request.CreateResponse(HttpStatusCode.OK, "Usuário excluído com sucesso!")
                 Else
-                    Return ResponseManager.ReturnBadRequest(Request, _logger, action, "Por favor, preencha os campos corretamente!")
+                    Throw New ApplicationException("Por favor, preencha os campos corretamente!")
                 End If
+            Catch ex As ApplicationException
+                Return ResponseManager.ReturnBadRequest(ex, Request, _logger, action)
             Catch ex As Exception
                 Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
             End Try
@@ -342,8 +308,10 @@ Namespace Controllers.Admin.Configuration
 
                     Return Request.CreateResponse(HttpStatusCode.OK, "Usuário excluído com sucesso!")
                 Else
-                    Return ResponseManager.ReturnBadRequest(Request, _logger, action, "Por favor, preencha os campos corretamente!")
+                    Throw New ApplicationException("Por favor, preencha os campos corretamente!")
                 End If
+            Catch ex As ApplicationException
+                Return ResponseManager.ReturnBadRequest(ex, Request, _logger, action)
             Catch ex As Exception
                 Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
             End Try

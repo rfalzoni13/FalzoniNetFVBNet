@@ -3,12 +3,11 @@ Imports FalzoniNetFVBNet.Presentation.Administrator.Clients.Base
 Imports FalzoniNetFVBNet.Presentation.Administrator.Clients.Interfaces.Configuration
 Imports FalzoniNetFVBNet.Presentation.Administrator.Models.Common
 Imports FalzoniNetFVBNet.Presentation.Administrator.Models.Configuration
-Imports FalzoniNetFVBNet.Presentation.Administrator.Models.Tables.Configuration
 Imports FalzoniNetFVBNet.Utils.Helpers
 
 Namespace Clients.Register
     Public Class RoleClient
-        Inherits BaseClient(Of RoleModel, RoleTableModel)
+        Inherits BaseClient(Of RoleModel)
         Implements IRoleClient
 
         Public Function GetAllNames() As List(Of String) Implements IRoleClient.GetAllNames
