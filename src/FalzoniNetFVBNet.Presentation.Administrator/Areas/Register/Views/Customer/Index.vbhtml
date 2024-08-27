@@ -85,7 +85,7 @@ End Section
 End Section
 
 @section scripts
-    @If FalzoniVB.Utils.Helpers.ConfigurationHelper.IsBundleled Then
+    @If FalzoniNetFVBNet.Utils.Helpers.ConfigurationHelper.IsBundleled Then
         @Scripts.Render("~/bundles/js/datatable")
         @Scripts.Render("~/bundles/js/moment")
     Else
