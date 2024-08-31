@@ -84,7 +84,6 @@
     <Compile Include="Helpers\RandomOAuthStateGeneratorHelper.vb" />
     <Compile Include="Helpers\RequestHelper.vb" />
     <Compile Include="Helpers\StringHelper.vb" />
-    <Compile Include="Helpers\UrlConfigurationHelper.vb" />
     <Compile Include="Keys\EmailKeys.vb" />
     <Compile Include="Keys\TwilioKeys.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

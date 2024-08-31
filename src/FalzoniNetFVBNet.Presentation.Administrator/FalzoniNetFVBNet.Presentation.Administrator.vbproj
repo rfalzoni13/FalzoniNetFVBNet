@@ -236,10 +236,11 @@
     <Compile Include="Areas\Configuration\Controllers\UserController.vb" />
     <Compile Include="Areas\Register\Controllers\CustomerController.vb" />
     <Compile Include="Areas\Register\RegisterAreaRegistration.vb" />
+    <Compile Include="Areas\Stock\Controllers\ProductController.vb" />
     <Compile Include="Areas\Stock\StockAreaRegistration.vb" />
     <Compile Include="Attributes\CustomActionAttribute.vb" />
     <Compile Include="Attributes\ProfileActionAttribute.vb" />
-    <Compile Include="Attributes\UserRegisterAttribute.vb" />
+    <Compile Include="Attributes\UserConfigurationAttribute.vb" />
     <Compile Include="Clients\Base\BaseClient.vb" />
     <Compile Include="Clients\Configuration\RoleClient.vb" />
     <Compile Include="Clients\Configuration\UserClient.vb" />
@@ -253,6 +254,7 @@
     <Compile Include="Clients\Register\CustomerClient.vb" />
     <Compile Include="Clients\Stock\ProductClient.vb" />
     <Compile Include="Controllers\AccountController.vb" />
+    <Compile Include="Controllers\Base\BaseController.vb" />
     <Compile Include="Controllers\ErrorController.vb" />
     <Compile Include="Controllers\HomeController.vb" />
     <Compile Include="Global.asax.vb">
@@ -313,6 +315,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Startup.vb" />
+    <Compile Include="Utils\PathUtils.vb" />
     <Compile Include="Utils\ResponseUtils.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -377,7 +380,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Stock\Controllers\" />
+    <Folder Include="Areas\Stock\Views\Product\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FalzoniNetFVBNet.Resources\FalzoniNetFVBNet.Resources.vbproj">

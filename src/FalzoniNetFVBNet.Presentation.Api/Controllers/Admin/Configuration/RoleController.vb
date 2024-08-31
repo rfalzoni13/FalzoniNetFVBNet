@@ -8,7 +8,6 @@ Imports NLog
 
 Namespace Controllers.Admin.Configuration
     <CustomAuthorize(Roles:="Administrator")>
-    <RoutePrefix("Api/Role")>
     Public Class RoleController
         Inherits ApiController
 #Region "Attributes"
@@ -32,7 +31,6 @@ Namespace Controllers.Admin.Configuration
         ''' <remarks>Listagem de todos os acessos pelos nomes</remarks>
         ''' <returns></returns>
         <HttpGet>
-        <Route("GelAllNames")>
         Public Function GelAllNames() As HttpResponseMessage
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try
@@ -59,7 +57,6 @@ Namespace Controllers.Admin.Configuration
         ''' <remarks>Listagem de todos os acessos</remarks>
         ''' <returns></returns>
         <HttpGet>
-        <Route("GetAll")>
         Public Function GetAll() As HttpResponseMessage
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try
@@ -85,7 +82,6 @@ Namespace Controllers.Admin.Configuration
         ''' <param name="Id">Id do usuário</param>
         ''' <returns></returns>
         <HttpGet>
-        <Route("Get")>
         Public Function [Get](Id As Guid) As HttpResponseMessage
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try

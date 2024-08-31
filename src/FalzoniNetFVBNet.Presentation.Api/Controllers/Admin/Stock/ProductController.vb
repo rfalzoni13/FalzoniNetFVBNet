@@ -1,26 +1,18 @@
-﻿Imports System.Net
-Imports System.Net.Http
+﻿Imports System.Net.Http
 Imports System.Web.Http
-Imports FalzoniNetFVBNet.Application.ServiceApplication.Register
-Imports FalzoniNetFVBNet.Application.ServiceApplication.Stock
+Imports FalzoniNetFVBNet.Domain.DTO.Stock
 Imports FalzoniNetFVBNet.Presentation.Api.Attributes
-Imports FalzoniNetFVBNet.Presentation.Api.Models.Stock
-Imports FalzoniNetFVBNet.Presentation.Api.Utils
-Imports NLog
+Imports FalzoniNetFVBNet.Presentation.Api.Controllers.Base
+Imports FalzoniNetFVBNet.Service.Stock
 
 Namespace Controllers.Admin.Stock
     <CustomAuthorize(Roles:="Administrator")>
-    <RoutePrefix("Api/Product")>
     Public Class ProductController
-        Inherits ApiController
-#Region "Attributes"
-        Private Shared ReadOnly _logger As Logger = LogManager.GetCurrentClassLogger()
-        Private ReadOnly _productServiceApplication As ProductServiceApplication
-#End Region
+        Inherits BaseController(Of ProductDTO)
 
 #Region "Constructor"
-        Public Sub New(productServiceApplication As ProductServiceApplication)
-            _productServiceApplication = productServiceApplication
+        Public Sub New(productService As ProductService)
+            MyBase.New(productService)
         End Sub
 #End Region
 
@@ -34,21 +26,8 @@ Namespace Controllers.Admin.Stock
         ''' <remarks>Listagem de todos os produtos</remarks>
         ''' <returns></returns>
         <HttpGet>
-        <Route("GetAll")>
-        Public Function GetAll() As HttpResponseMessage
-            Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
-            Try
-                _logger.Info(action + " - Iniciado")
-
-                Dim retorno = _productServiceApplication.GetAll()
-
-                _logger.Info(action + " - Sucesso!")
-
-                _logger.Info(action + " - Finalizado")
-                Return Request.CreateResponse(HttpStatusCode.OK, retorno)
-            Catch ex As Exception
-                Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
-            End Try
+        Public Overrides Function GetAll() As HttpResponseMessage
+            Return MyBase.GetAll()
         End Function
 
         ' GET Api/Product/Get?id={Id}
@@ -62,27 +41,8 @@ Namespace Controllers.Admin.Stock
         ''' <param name="Id">Id do produto</param>
         ''' <returns></returns>
         <HttpGet>
-        <Route("Get")>
-        Public Function [Get](Id As Guid) As HttpResponseMessage
-            Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
-            Try
-                _logger.Info(action + " - Iniciado")
-
-                If Guid.Equals(Id, Guid.Empty) Then
-                    Throw New ApplicationException("Parâmetro inválido")
-                End If
-
-                Dim product = _productServiceApplication.Get(Id)
-
-                _logger.Info(action + " - Sucesso!")
-
-                _logger.Info(action + " - Finalizado")
-                Return Request.CreateResponse(HttpStatusCode.OK, product)
-            Catch ex As ApplicationException
-                Return ResponseManager.ReturnBadRequest(ex, Request, _logger, action)
-            Catch ex As Exception
-                Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
-            End Try
+        Public Overrides Function [Get](Id As Guid) As HttpResponseMessage
+            Return MyBase.[Get](Id)
         End Function
 #End Region
 
@@ -95,71 +55,12 @@ Namespace Controllers.Admin.Stock
         ''' <response code="401">Unauthorized</response>
         ''' <response code="500">Internal Server Error</response>
         ''' <remarks>Insere um novo produto passando um objeto no body da requisição no método POST</remarks>
-        ''' <param name="model">Objeto de registro produto</param>
+        ''' <param name="dto">Objeto de registro produto</param>
         ''' <returns></returns>
         <HttpPost>
-        <Route("Add")>
-        Public Function Add(<FromBody> model As ProductModel) As HttpResponseMessage
-            Dim action = Me.ActionContext.ActionDescriptor.ActionName
-            Try
-                If ModelState.IsValid Then
-                    _logger.Info(action + " - Iniciado")
-
-                    Dim productDTO = model.ConvertToDTO()
-
-                    _productServiceApplication.Add(productDTO)
-
-                    _logger.Info(action + " - Sucesso!")
-
-                    _logger.Info(action + " - Finalizado")
-
-                    Return Request.CreateResponse(HttpStatusCode.Created, "Produto incluído com sucesso!")
-                Else
-                    Throw New ApplicationException("Por favor, preencha os campos corretamente!")
-                End If
-            Catch ex As ApplicationException
-                Return ResponseManager.ReturnBadRequest(ex, Request, _logger, action)
-            Catch ex As Exception
-                Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
-            End Try
+        Public Overrides Function Add(<FromBody> dto As ProductDTO) As HttpResponseMessage
+            Return MyBase.Add(dto)
         End Function
-
-        '' POST: Api/Product/AddAsync
-        '''' <summary>
-        '''' Inserir produto modo assíncrono
-        '''' </summary>
-        '''' <response code="400">Bad Request</response>
-        '''' <response code="401">Unauthorized</response>
-        '''' <response code="500">Internal Server Error</response>
-        '''' <remarks>Insere um novo produto passando um objeto no body da requisição no método POST de forma assíncrona</remarks>
-        '''' <param name="model">Objeto de registro produto</param>
-        '''' <returns></returns>
-        '<HttpPost>
-        '<Route("Add")>
-        'Public Async Function AddAsync(<FromBody> model As ProductModel) As Task(Of HttpResponseMessage)
-        '    Dim action = Me.ActionContext.ActionDescriptor.ActionName
-        '    Try
-        '        If ModelState.IsValid Then
-        '            _logger.Info(action + " - Iniciado")
-
-        '            Dim productDTO = model.ConvertToDTO()
-
-        '            Await _productServiceApplication.AddAsync(productDTO)
-
-        '            _logger.Info(action + " - Sucesso!")
-
-        '            _logger.Info(action + " - Finalizado")
-
-        '            Return Request.CreateResponse(HttpStatusCode.Created, "Produto incluído com sucesso!")
-        '        Else
-        '            Throw New ApplicationException("Por favor, preencha os campos corretamente!")
-        '        End If
-        '    Catch ex As ApplicationException
-        '        Return ResponseManager.ReturnBadRequest(ex, Request, _logger, action)
-        '    Catch ex As Exception
-        '        Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
-        '    End Try
-        'End Function
 #End Region
 
 #Region "Update Product"
@@ -171,70 +72,12 @@ Namespace Controllers.Admin.Stock
         ''' <response code="401">Unauthorized</response>
         ''' <response code="500">Internal Server Error</response>
         ''' <remarks>Atualiza o produto passando o objeto no body da requisição pelo método PUT</remarks>
-        ''' <param name="model">Objeto de registro do produto</param>
+        ''' <param name="dto">Objeto de registro produto</param>
         ''' <returns></returns>
         <HttpPut>
-        <Route("Update")>
-        Public Function Update(<FromBody> model As ProductModel) As HttpResponseMessage
-            Dim action = Me.ActionContext.ActionDescriptor.ActionName
-            Try
-                If ModelState.IsValid Then
-                    _logger.Info(action + " - Iniciado")
-
-                    Dim productDTO = model.ConvertToDTO()
-
-                    _productServiceApplication.Update(productDTO)
-
-                    _logger.Info(action + " - Sucesso!")
-
-                    _logger.Info(action + " - Finalizado")
-
-                    Return Request.CreateResponse(HttpStatusCode.Created, "Produto atualizado com sucesso!")
-                Else
-                    Throw New ApplicationException("Por favor, preencha os campos corretamente!")
-                End If
-            Catch ex As ApplicationException
-                Return ResponseManager.ReturnBadRequest(ex, Request, _logger, action)
-            Catch ex As Exception
-                Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
-            End Try
+        Public Overrides Function Update(<FromBody> dto As ProductDTO) As HttpResponseMessage
+            Return MyBase.Update(dto)
         End Function
-
-        ''PUT: Api/Product/UpdateAsync
-        '''' <summary>
-        '''' Atualizar produto modo assíncrono
-        '''' </summary>
-        '''' <response code="400">Bad Request</response>
-        '''' <response code="401">Unauthorized</response>
-        '''' <response code="500">Internal Server Error</response>
-        '''' <remarks>Atualiza o produto passando o objeto no body da requisição pelo método PUT de forma assíncrona</remarks>
-        '''' <param name="model">Objeto de registro do produto</param>
-        '<HttpPut>
-        '<Route("UpdateAsync")>
-        'Public Async Function UpdateAsync(<FromBody> model As ProductModel) As Task(Of HttpResponseMessage)
-        '    Dim action = Me.ActionContext.ActionDescriptor.ActionName
-        '    Try
-        '        If ModelState.IsValid Then
-        '            _logger.Info(action + " - Iniciado")
-
-        '            Dim productDTO = model.ConvertToDTO()
-
-        '            Await _productServiceApplication.UpdateAsync(productDTO)
-
-        '            _logger.Info(action + " - Sucesso!")
-
-        '            _logger.Info(action + " - Finalizado")
-
-        '            Return Request.CreateResponse(HttpStatusCode.Created, "Produto atualizado com sucesso!")
-        '        Else
-        '            Throw New ApplicationException("Por favor, preencha os campos corretamente!")
-        '        End If
-        '    Catch ex As ApplicationException
-        '        Return ResponseManager.ReturnBadRequest(ex, Request, _logger, action)
-        '    Catch ex As Exception
-        '        Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
-        '    End Try
-        'End Function
 #End Region
 
 #Region "Delete Product"
@@ -246,71 +89,13 @@ Namespace Controllers.Admin.Stock
         ''' <response code="401">Unauthorized</response>
         ''' <response code="500">Internal Server Error</response>
         ''' <remarks>Exclui o produto passando o objeto no body da requisição pelo método DELETE</remarks>
-        ''' <param name="model">Objeto de registro do produto</param>
+        ''' <param name="Id">Id de identificação do produto</param>
         ''' <returns></returns>
         <HttpDelete>
         <Route("Delete")>
-        Public Function Delete(<FromBody> model As ProductModel) As HttpResponseMessage
-            Dim action = Me.ActionContext.ActionDescriptor.ActionName
-            Try
-                If ModelState.IsValid Then
-                    _logger.Info(action + " - Iniciado")
-
-                    Dim productDTO = model.ConvertToDTO()
-
-                    _productServiceApplication.Delete(productDTO)
-
-                    _logger.Info(action + " - Sucesso!")
-
-                    _logger.Info(action + " - Finalizado")
-
-                    Return Request.CreateResponse(HttpStatusCode.Created, "Produto excluído com sucesso!")
-                Else
-                    Throw New ApplicationException("Por favor, preencha os campos corretamente!")
-                End If
-            Catch ex As ApplicationException
-                Return ResponseManager.ReturnBadRequest(ex, Request, _logger, action)
-            Catch ex As Exception
-                Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
-            End Try
+        Public Overrides Function Delete(<FromUri> Id As Guid) As HttpResponseMessage
+            Return MyBase.Delete(Id)
         End Function
-
-        '''' <summary>
-        '''' Excluir produto assíncrono
-        '''' </summary>
-        '''' <response code="400">Bad Request</response>
-        '''' <response code="401">Unauthorized</response>
-        '''' <response code="500">Internal Server Error</response>
-        '''' <remarks>Exclui o produto passando o objeto no body da requisição pelo método DELETE de forma assíncrona</remarks>
-        '''' <param name="model">Objeto de registro do produto</param>
-        '''' <returns></returns>
-        '' DELETE: Api/Product/DeleteAsync
-        '<HttpDelete>
-        '<Route("Delete")>
-        'Public Async Function DeleteAsync(<FromBody> model As ProductModel) As Task(Of HttpResponseMessage)
-        '    Dim action = Me.ActionContext.ActionDescriptor.ActionName
-        '    Try
-        '        If ModelState.IsValid Then
-        '            _logger.Info(action + " - Iniciado")
-
-        '            Dim productDTO = model.ConvertToDTO()
-
-        '            Await _productServiceApplication.DeleteAsync(productDTO)
-
-        '            _logger.Info(action + " - Sucesso!")
-
-        '            _logger.Info(action + " - Finalizado")
-
-        '            Return Request.CreateResponse(HttpStatusCode.Created, "Produto excluído com sucesso!")
-        '        Else
-        '            Throw New ApplicationException("Por favor, preencha os campos corretamente!")
-        '        End If
-        '    Catch ex As ApplicationException
-        '        Return ResponseManager.ReturnBadRequest(ex, Request, _logger, action)
-        '    Catch ex As Exception
-        '        Return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action)
-        '    End Try
-        'End Function
 #End Region
     End Class
 End Namespace

@@ -10,7 +10,6 @@ Imports FalzoniNetFVBNet.Presentation.Api.Utils
 Imports NLog
 
 Namespace Controllers.Admin.Identity
-    <RoutePrefix("Api/IdentityUtility")>
     Public Class IdentityUtilityController
         Inherits ApiController
 #Region "Attributes"
@@ -35,7 +34,6 @@ Namespace Controllers.Admin.Identity
         ''' <remarks>Obtém as opções de autencicação de dois fatores</remarks>
         ''' <returns></returns>
         <HttpGet>
-        <Route("GetTwoFactorProviders")>
         Public Async Function GetTwoFactorProviders(email As String, Optional returnUrl As String = Nothing) As Task(Of HttpResponseMessage)
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
 
@@ -61,7 +59,6 @@ Namespace Controllers.Admin.Identity
         ''' <returns></returns>
         <CustomAuthorize>
         <HttpPost>
-        <Route("SendTwoFactorProviderCode")>
         Public Async Function SendTwoFactorProviderCode(sendCodeModel As SendCodeModel) As Task(Of HttpResponseMessage)
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
 
@@ -94,7 +91,6 @@ Namespace Controllers.Admin.Identity
         ''' <returns></returns>
         <CustomAuthorize>
         <HttpPost>
-        <Route("VerifyCodeTwoFactor")>
         Public Async Function VerifyCodeTwoFactor(verifiyCodeModel As VerifyCodeModel) As Task(Of HttpResponseMessage)
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
 
@@ -136,7 +132,6 @@ Namespace Controllers.Admin.Identity
         ''' <remarks>Envio de código de confirmação de e-mail</remarks>
         ''' <returns></returns>
         <HttpPost>
-        <Route("SendEmailConfirmationCode")>
         Public Async Function SendEmailConfirmationCode(generateTokenEmailModel As GenerateTokenEmailModel) As Task(Of HttpResponseMessage)
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try
@@ -170,7 +165,6 @@ Namespace Controllers.Admin.Identity
         ''' <remarks>Envio de código de confirmação de telefone</remarks>
         ''' <returns></returns>
         <HttpPost>
-        <Route("SendPhoneConfirmationCode")>
         Public Async Function SendPhoneConfirmationCode(generateTokenPhoneModel As GenerateTokenPhoneModel) As Task(Of HttpResponseMessage)
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try
@@ -204,7 +198,6 @@ Namespace Controllers.Admin.Identity
         ''' <remarks>Verificação de código de confirmação do e-mail do usuário</remarks>
         ''' <returns></returns>
         <HttpPost>
-        <Route("VerifyEmailConfirmationCode")>
         Public Async Function VerifyEmailConfirmationCode(confirmEmailCodeModel As ConfirmEmailCodeModel) As Task(Of HttpResponseMessage)
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try
@@ -242,7 +235,6 @@ Namespace Controllers.Admin.Identity
         ''' <remarks>Verificação de código de confirmação do telefone do usuário</remarks>
         ''' <returns></returns>
         <HttpPost>
-        <Route("VerifyPhoneConfirmationCode")>
         Public Async Function VerifyPhoneConfirmationCode(confirmPhoneCodeModel As ConfirmPhoneCodeModel) As Task(Of HttpResponseMessage)
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try

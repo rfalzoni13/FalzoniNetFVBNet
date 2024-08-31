@@ -14,7 +14,6 @@ Imports Microsoft.Owin.Security.Cookies
 Imports NLog
 
 Namespace Controllers.Admin.Identity
-    <RoutePrefix("Api/Account")>
     Public Class AccountController
         Inherits ApiController
 #Region "Attributes"
@@ -37,8 +36,7 @@ Namespace Controllers.Admin.Identity
         ''' <remarks>Deslogar do Sistema</remarks>
         ''' <returns></returns>
         <HttpPost>
-        <Route("GelAllNames")>
-        Public Function GelAllNames() As HttpResponseMessage
+        Public Function Logout() As HttpResponseMessage
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try
                 _logger.Info(action + " - Iniciado")
@@ -68,7 +66,6 @@ Namespace Controllers.Admin.Identity
         <OverrideAuthentication>
         <HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)>
         <HttpGet>
-        <Route("ExternalLogin", Name:="ExternalLogin")>
         Public Async Function ExternalLogin(provider As String, Optional [error] As String = Nothing) As Task(Of HttpResponseMessage)
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try
@@ -105,7 +102,6 @@ Namespace Controllers.Admin.Identity
         <OverrideAuthentication>
         <HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)>
         <HttpGet>
-        <Route("GetExternalLogins")>
         Public Function GetExternalLogins(returnUrl As String, Optional generateState As Boolean = False) As HttpResponseMessage
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try
@@ -156,7 +152,6 @@ Namespace Controllers.Admin.Identity
         ''' <remarks>Adiciona login externo</remarks>
         ''' <returns></returns>
         <HttpPost>
-        <Route("AddExternalLogin")>
         Public Async Function AddExternalLogin(model As AddExternalLoginBindingModel) As Task(Of HttpResponseMessage)
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try
@@ -186,7 +181,6 @@ Namespace Controllers.Admin.Identity
         ''' <remarks>Adiciona usuário ao provedor de login externo</remarks>
         ''' <returns></returns>
         <HttpPost>
-        <Route("AddExternalUserLogin")>
         Public Async Function AddExternalUserLogin(model As RegisterExternalBindingModel) As Task(Of HttpResponseMessage)
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try
@@ -214,7 +208,6 @@ Namespace Controllers.Admin.Identity
         ''' <remarks>Remove provedor de login externo</remarks>
         ''' <returns></returns>
         <HttpPost>
-        <Route("RemoveExternalLogin")>
         Public Async Function RemoveExternalLogin(model As RemoveLoginBindingModel) As Task(Of HttpResponseMessage)
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try

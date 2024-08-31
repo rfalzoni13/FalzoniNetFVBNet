@@ -182,10 +182,10 @@
     <Compile Include="Controllers\Admin\Identity\IdentityUtilityController.vb" />
     <Compile Include="Controllers\Admin\Register\CustomerController.vb" />
     <Compile Include="Controllers\Admin\Stock\ProductController.vb" />
+    <Compile Include="Controllers\Base\BaseController.vb" />
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Base\BaseModel.vb" />
     <Compile Include="Models\Common\FileModel.vb" />
     <Compile Include="Models\Common\StatusCodeModel.vb" />
     <Compile Include="Models\Identity\AddExternalLoginBindingModel.vb" />
@@ -199,10 +199,6 @@
     <Compile Include="Models\Identity\RemoveLoginBindingModel.vb" />
     <Compile Include="Models\Identity\SendCodeModel.vb" />
     <Compile Include="Models\Identity\VerifyCodeModel.vb" />
-    <Compile Include="Models\Register\CustomerAddressModel.vb" />
-    <Compile Include="Models\Register\CustomerModel.vb" />
-    <Compile Include="Models\Register\ProductCategoryModel.vb" />
-    <Compile Include="Models\Stock\ProductModel.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -271,6 +267,10 @@
     <ProjectReference Include="..\FalzoniNetFVBNet.Infra.IoC\FalzoniNetFVBNet.Infra.IoC.vbproj">
       <Project>{63ABE4D1-147B-4876-8EBE-EC5A8D294686}</Project>
       <Name>FalzoniNetFVBNet.Infra.IoC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FalzoniNetFVBNet.Service\FalzoniNetFVBNet.Service.vbproj">
+      <Project>{5A968084-5563-4B87-BF6F-7208B9A957A9}</Project>
+      <Name>FalzoniNetFVBNet.Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\FalzoniNetFVBNet.Utils\FalzoniNetFVBNet.Utils.vbproj">
       <Project>{287EC006-6F4E-43BF-98E3-ADB72921446B}</Project>

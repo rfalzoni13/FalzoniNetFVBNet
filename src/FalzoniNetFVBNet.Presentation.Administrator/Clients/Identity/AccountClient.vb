@@ -12,7 +12,7 @@ Namespace Clients.Identity
     Public Class AccountClient
 #Region "LOGIN"
         Public Async Function Login(model As LoginModel, request As HttpRequestBase) As Task
-            Dim url = UrlConfigurationHelper.AccountLogin
+            Dim url = $"{PathUtils.GetApiPath()}/Account/Login"
             Using httpClient As New HttpClient()
 
                 'Setar Timeout de conexão
@@ -64,7 +64,7 @@ Namespace Clients.Identity
 
 
         Public Async Function RefreshToken() As Task
-            Dim url = UrlConfigurationHelper.AccountLogin
+            Dim url = $"{PathUtils.GetApiPath()}/Account/Login"
 
             Dim reftoken As String = HttpContext.Current.GetOwinContext().Authentication.User.Claims.
             FirstOrDefault(Function(x) x.Type.Contains("RefreshToken")).Value
@@ -119,7 +119,7 @@ Namespace Clients.Identity
         End Function
 
         Public Async Function Logout(request As HttpRequestBase) As Task
-            Dim url = UrlConfigurationHelper.AccountLogout
+            Dim url = $"{PathUtils.GetApiPath()}/Account/Logout"
 
             Using client As New HttpClient()
                 Dim response As HttpResponseMessage = Await client.PostAsync(url, Nothing)
@@ -137,7 +137,7 @@ Namespace Clients.Identity
 
 #Region "EXTERNAL LOGIN"
         Public Async Function ExternalLogin(provider As String) As Task
-            Dim url = $"{UrlConfigurationHelper.AccountExternalLogin}?provider={provider}"
+            Dim url = $"{PathUtils.GetApiPath()}/Account/ExternalLogin?provider={provider}"
 
             Using client As New HttpClient()
                 Dim response As HttpResponseMessage = Await client.GetAsync(url)
@@ -150,7 +150,7 @@ Namespace Clients.Identity
         End Function
 
         Public Async Function GetExternalLogins() As Task(Of IList(Of ExternalLoginModel))
-            Dim url As String = UrlConfigurationHelper.AccountGetExternalLogins
+            Dim url As String = $"{PathUtils.GetApiPath()}/Account/GetExternalLogins"
 
             Using client As New HttpClient()
                 Dim response As HttpResponseMessage = Await client.GetAsync(url)
@@ -169,7 +169,7 @@ Namespace Clients.Identity
 
 
         Public Async Function AddExternalLogin(model As AddExternalLoginBindingModel) As Task(Of IList(Of IdentityResultCodeModel))
-            Dim url = UrlConfigurationHelper.AccountAddExternalLogin
+            Dim url = $"{PathUtils.GetApiPath()}/Account/AddExternalLogin"
 
             Using client As New HttpClient()
                 Dim response As HttpResponseMessage = Await client.PostAsJsonAsync(url, model)
@@ -187,7 +187,7 @@ Namespace Clients.Identity
         End Function
 
         Public Async Function AddUserExternalLogin(model As RegisterExternalBindingModel) As Task(Of IList(Of IdentityResultCodeModel))
-            Dim url = UrlConfigurationHelper.AccountAddUserExternalLogin
+            Dim url = $"{PathUtils.GetApiPath()}/Account/AddUserExternalLogin"
 
             Using client As New HttpClient()
                 Dim response As HttpResponseMessage = Await client.PostAsJsonAsync(url, model)
@@ -205,7 +205,7 @@ Namespace Clients.Identity
         End Function
 
         Public Async Function RemoveExternalLogin(model As RegisterExternalBindingModel) As Task(Of IList(Of IdentityResultCodeModel))
-            Dim url = UrlConfigurationHelper.AccountRemoveExternalLogin
+            Dim url = $"{PathUtils.GetApiPath()}/Account/RemoveExternalLogin"
 
             Using client As New HttpClient()
                 Dim response As HttpResponseMessage = Await client.PostAsJsonAsync(url, model)
@@ -225,7 +225,7 @@ Namespace Clients.Identity
 
 #Region "PASSWORD"
         Public Async Function ChangePassword(model As ChangePasswordModel) As Task(Of IdentityResultCodeModel)
-            Dim url = UrlConfigurationHelper.AccountChangePassword
+            Dim url = $"{PathUtils.GetApiPath()}/Account/ChangePassword"
 
             Using client As New HttpClient()
                 Dim response As HttpResponseMessage = Await client.PostAsJsonAsync(url, model)
@@ -243,7 +243,7 @@ Namespace Clients.Identity
         End Function
 
         Public Async Function ForgotPassword(model As ForgotPasswordModel) As Task(Of String)
-            Dim url = UrlConfigurationHelper.AccountForgotPassword
+            Dim url = $"{PathUtils.GetApiPath()}/Account/ForgotPassword"
 
             Using client As New HttpClient()
                 Dim response As HttpResponseMessage = Await client.PostAsJsonAsync(url, model)
@@ -262,7 +262,7 @@ Namespace Clients.Identity
 
 
         Public Async Function ResetPassword(model As ResetPasswordModel) As Task(Of IdentityResultCodeModel)
-            Dim url = UrlConfigurationHelper.AccountResetPassword
+            Dim url = $"{PathUtils.GetApiPath()}/Account/ResetPassword"
 
             Using client As New HttpClient()
                 Dim response As HttpResponseMessage = Await client.PostAsJsonAsync(url, model)

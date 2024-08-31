@@ -1,20 +1,19 @@
-﻿Imports FalzoniNetFVBNet.Application.ServiceApplication.Register
-Imports FalzoniNetFVBNet.Application.ServiceApplication.Stock
+﻿Imports System.Data.Entity
 Imports FalzoniNetFVBNet.Application.ServiceApplication.Configuration
+Imports FalzoniNetFVBNet.Application.ServiceApplication.Identity
 Imports FalzoniNetFVBNet.Domain.Interfaces.Repositories.Base
 Imports FalzoniNetFVBNet.Domain.Interfaces.Repositories.Register
-Imports FalzoniNetFVBNet.Application.ServiceApplication.Identity
+Imports FalzoniNetFVBNet.Domain.Interfaces.Repositories.Stock
 Imports FalzoniNetFVBNet.Infra.Data.Context.MySql
 Imports FalzoniNetFVBNet.Infra.Data.Context.SqlServer
 Imports FalzoniNetFVBNet.Infra.Data.Repositories.Base
 Imports FalzoniNetFVBNet.Infra.Data.Repositories.Register
-Imports FalzoniNetFVBNet.Service.Register
-Imports FalzoniNetFVBNet.Utils.Helpers
-Imports FalzoniNetFVBNet.Domain.Interfaces.Repositories.Stock
 Imports FalzoniNetFVBNet.Infra.Data.Repositories.Stock
+Imports FalzoniNetFVBNet.Service.Base
+Imports FalzoniNetFVBNet.Service.Register
 Imports FalzoniNetFVBNet.Service.Stock
+Imports FalzoniNetFVBNet.Utils.Helpers
 Imports Unity
-Imports System.Data.Entity
 
 Public Class UnityModule
     Public Shared Function LoadModules() As UnityContainer
@@ -30,6 +29,8 @@ Public Class UnityModule
 #End Region
 
 #Region "Services"
+        container.RegisterType(GetType(ServiceBase(Of)))
+
         container.RegisterType(Of CustomerService)()
         container.RegisterType(Of ProductService)()
 #End Region
@@ -39,9 +40,6 @@ Public Class UnityModule
         container.RegisterType(Of AccountServiceApplication)()
         container.RegisterType(Of IdentityUtilityServiceApplication)()
         container.RegisterType(Of UserServiceApplication)()
-
-        container.RegisterType(Of CustomerServiceApplication)()
-        container.RegisterType(Of ProductServiceApplication)()
 #End Region
 
         'Complements

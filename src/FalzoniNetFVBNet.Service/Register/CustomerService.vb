@@ -1,9 +1,11 @@
 ﻿Imports FalzoniNetFVBNet.Domain.DTO.Register
 Imports FalzoniNetFVBNet.Domain.Interfaces.Repositories.Base
 Imports FalzoniNetFVBNet.Domain.Interfaces.Repositories.Register
+Imports FalzoniNetFVBNet.Service.Base
 
 Namespace Register
     Public Class CustomerService
+        Inherits ServiceBase(Of CustomerDTO)
         Private ReadOnly _customerRepository As ICustomerRepository
         Private ReadOnly _customerAddressRepository As ICustomerAddressRepository
         Private ReadOnly _unitOfWork As IUnitOfWork
@@ -11,23 +13,22 @@ Namespace Register
         Public Sub New(customerRepository As ICustomerRepository,
         customerAddressRepository As ICustomerAddressRepository,
         unitOfWork As IUnitOfWork)
-
             _customerRepository = customerRepository
             _customerAddressRepository = customerAddressRepository
             _unitOfWork = unitOfWork
         End Sub
 
-        Public Function [Get](Id As Guid) As CustomerDTO
+        Public Overrides Function [Get](Id As Guid) As CustomerDTO
             Dim customer = _customerRepository.GetWithInclude(Id)
             Return New CustomerDTO(customer)
         End Function
 
-        Public Function GetAll() As List(Of CustomerDTO)
+        Public Overrides Function GetAll() As IEnumerable(Of CustomerDTO)
             Dim customers = _customerRepository.GetAll()
             Return customers.ToList().ConvertAll(Function(c) New CustomerDTO(c))
         End Function
 
-        Public Sub Add(customerDTO As CustomerDTO)
+        Public Overrides Sub Add(customerDTO As CustomerDTO)
             Using transaction = _unitOfWork.BeginTransaction()
                 Try
                     customerDTO.ConfigureNewEntity()
@@ -44,7 +45,7 @@ Namespace Register
             End Using
         End Sub
 
-        Public Sub Update(customerDTO As CustomerDTO)
+        Public Overrides Sub Update(customerDTO As CustomerDTO)
             Using transaction = _unitOfWork.BeginTransaction()
                 Try
                     Dim customer = _customerRepository.Get(customerDTO.Id)
@@ -85,11 +86,11 @@ Namespace Register
             End Using
         End Sub
 
-        Public Sub Delete(customerDTO As CustomerDTO)
+        Public Overrides Sub Delete(Id As Guid)
             Using transaction = _unitOfWork.BeginTransaction()
                 Try
 
-                    _customerRepository.Delete(customerDTO.Id)
+                    _customerRepository.Delete(Id)
 
                     transaction.Commit()
                 Catch ex As Exception

@@ -12,14 +12,20 @@ Namespace Clients.Register
         Inherits BaseClient(Of CustomerModel)
         Implements ICustomerClient
 
-        Public Async Function GetTableAsync(url As String) As Task(Of CustomerTableModel) Implements ICustomerClient.GetTableAsync
+        Public Sub New()
+            MyBase.New()
+
+            url += "/Customer"
+        End Sub
+
+        Public Async Function GetTableAsync() As Task(Of CustomerTableModel) Implements ICustomerClient.GetTableAsync
             Dim table = New CustomerTableModel()
 
             Try
                 Using client As New HttpClient()
                     client.DefaultRequestHeaders.Authorization = New System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token)
 
-                    Dim response As HttpResponseMessage = Await client.GetAsync(url)
+                    Dim response As HttpResponseMessage = Await client.GetAsync($"{url}/GetAll")
                     If response.IsSuccessStatusCode Then
                         Dim customers = Await response.Content.ReadAsAsync(Of ICollection(Of CustomerModel))()
 

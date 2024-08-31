@@ -10,13 +10,17 @@ Namespace Clients.Register
         Inherits BaseClient(Of RoleModel)
         Implements IRoleClient
 
-        Public Function GetAllNames() As List(Of String) Implements IRoleClient.GetAllNames
-            Dim url = UrlConfigurationHelper.RoleGetAllNames
+        Public Sub New()
+            MyBase.New()
 
+            url += "/Role"
+        End Sub
+
+        Public Function GetAllNames() As List(Of String) Implements IRoleClient.GetAllNames
             Using client As New HttpClient()
                 client.DefaultRequestHeaders.Authorization = New System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token)
 
-                Dim response As HttpResponseMessage = client.GetAsync(url).Result
+                Dim response As HttpResponseMessage = client.GetAsync($"{url}/GetAllNames").Result
                 If response.IsSuccessStatusCode Then
                     Dim roles = response.Content.ReadAsAsync(Of List(Of String))().Result
 
