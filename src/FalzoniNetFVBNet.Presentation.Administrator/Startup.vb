@@ -11,7 +11,5 @@ Public Module Startup
             .AuthenticationType = "ApplicationCookie",
             .LoginPath = New PathString("/Account/Login")
         })
-
-        UrlConfigurationHelper.SetUrlList()
     End Sub
 End Module

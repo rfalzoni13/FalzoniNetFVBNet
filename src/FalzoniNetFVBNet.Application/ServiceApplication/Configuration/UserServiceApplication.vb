@@ -159,11 +159,11 @@ Namespace ServiceApplication.Configuration
             End Using
         End Sub
 
-        Public Sub Delete(register As ApplicationUserRegisterDTO)
+        Public Sub Delete(Id As String)
             Using scope As New TransactionScope(TransactionScopeAsyncFlowOption.Enabled)
                 Try
                     'Get user And rollback if Not exists
-                    Dim user = UserManager.FindById(register.ID)
+                    Dim user = UserManager.FindById(Id)
 
                     If user Is Nothing Then
                         Throw New ArgumentNullException("Nenhum usuário encontrado!")
@@ -327,11 +327,11 @@ Namespace ServiceApplication.Configuration
             End Using
         End Function
 
-        Public Async Function DeleteAsync(register As ApplicationUserRegisterDTO) As Task
+        Public Async Function DeleteAsync(Id As String) As Task
             Using scope As New TransactionScope(TransactionScopeAsyncFlowOption.Enabled)
                 Try
                     'Get user And rollback if Not exists
-                    Dim user = Await UserManager.FindByIdAsync(register.ID)
+                    Dim user = Await UserManager.FindByIdAsync(Id)
 
                     If user Is Nothing Then
                         Throw New ArgumentNullException("Nenhum usuário encontrado!")

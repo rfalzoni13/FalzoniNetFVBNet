@@ -12,14 +12,20 @@ Namespace Clients.Stock
         Inherits BaseClient(Of ProductModel)
         Implements IProductClient
 
-        Public Async Function GetTableAsync(url As String) As Task(Of ProductTableModel) Implements IProductClient.GetTableAsync
+        Public Sub New()
+            MyBase.New()
+
+            url += "/Product"
+        End Sub
+
+        Public Async Function GetTableAsync() As Task(Of ProductTableModel) Implements IProductClient.GetTableAsync
             Dim table = New ProductTableModel()
 
             Try
                 Using client As New HttpClient()
                     client.DefaultRequestHeaders.Authorization = New System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token)
 
-                    Dim response As HttpResponseMessage = Await client.GetAsync(url)
+                    Dim response As HttpResponseMessage = Await client.GetAsync($"{url}/GetAll")
                     If response.IsSuccessStatusCode Then
                         Dim products = Await response.Content.ReadAsAsync(Of ICollection(Of ProductModel))()
 

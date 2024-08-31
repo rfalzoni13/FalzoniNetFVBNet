@@ -6,6 +6,6 @@ Imports FalzoniNetFVBNet.Presentation.Administrator.Models.Tables.Register
 Namespace Clients.Interfaces.Register
     Public Interface ICustomerClient
         Inherits IBaseClient(Of CustomerModel)
-        Function GetTableAsync(url As String) As Task(Of CustomerTableModel)
+        Function GetTableAsync() As Task(Of CustomerTableModel)
     End Interface
 End Namespace

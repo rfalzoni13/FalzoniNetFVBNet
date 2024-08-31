@@ -23,7 +23,7 @@ Namespace Attributes
                 Try
                     Dim user As UserModel = filterContext.HttpContext.Session("UserData")
                     If user Is Nothing Then
-                        user = Task.Run(Async Function() Await userClient.GetAsync(UrlConfigurationHelper.UserGet, userId)).Result
+                        user = Task.Run(Async Function() Await userClient.GetAsync(userId)).Result
                     End If
 
                     filterContext.HttpContext.Session("UserData") = user
@@ -38,7 +38,7 @@ Namespace Attributes
                     filterContext.Controller.TempData("Return") = New ReturnModel With
                     {
                         .Type = "Error",
-                        .Message = ex.Message
+                        .Message = If(ex.InnerException IsNot Nothing, ex.InnerException.Message, ex.Message)
                     }
 
                     filterContext.Result = New RedirectToRouteResult(New RouteValueDictionary From

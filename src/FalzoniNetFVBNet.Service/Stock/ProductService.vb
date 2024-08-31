@@ -2,9 +2,11 @@
 Imports FalzoniNetFVBNet.Domain.Interfaces.Repositories.Base
 Imports FalzoniNetFVBNet.Domain.Interfaces.Repositories.Register
 Imports FalzoniNetFVBNet.Domain.Interfaces.Repositories.Stock
+Imports FalzoniNetFVBNet.Service.Base
 
 Namespace Stock
     Public Class ProductService
+        Inherits ServiceBase(Of ProductDTO)
         Private ReadOnly _productRepository As IProductRepository
         Private ReadOnly _productCategoryRepository As IProductCategoryRepository
         Private ReadOnly _unitOfWork As IUnitOfWork
@@ -18,17 +20,17 @@ Namespace Stock
             _unitOfWork = unitOfWork
         End Sub
 
-        Public Function [Get](Id As Guid) As ProductDTO
+        Public Overrides Function [Get](Id As Guid) As ProductDTO
             Dim product = _productRepository.Get(Id)
             Return New ProductDTO(product)
         End Function
 
-        Public Function GetAll() As List(Of ProductDTO)
+        Public Overrides Function GetAll() As IEnumerable(Of ProductDTO)
             Dim products = _productRepository.GetAll()
             Return products.ToList().ConvertAll(Function(c) New ProductDTO(c))
         End Function
 
-        Public Sub Add(productDTO As ProductDTO)
+        Public Overrides Sub Add(productDTO As ProductDTO)
             Using transaction = _unitOfWork.BeginTransaction()
                 Try
                     productDTO.ConfigureNewEntity()
@@ -45,7 +47,7 @@ Namespace Stock
             End Using
         End Sub
 
-        Public Sub Update(productDTO As ProductDTO)
+        Public Overrides Sub Update(productDTO As ProductDTO)
             Using transaction = _unitOfWork.BeginTransaction()
                 Try
                     Dim product = _productRepository.Get(productDTO.Id)
@@ -68,11 +70,11 @@ Namespace Stock
             End Using
         End Sub
 
-        Public Sub Delete(productDTO As ProductDTO)
+        Public Overrides Sub Delete(Id As Guid)
             Using transaction = _unitOfWork.BeginTransaction()
                 Try
 
-                    _productRepository.Delete(productDTO.Id)
+                    _productRepository.Delete(Id)
 
                     transaction.Commit()
                 Catch ex As Exception

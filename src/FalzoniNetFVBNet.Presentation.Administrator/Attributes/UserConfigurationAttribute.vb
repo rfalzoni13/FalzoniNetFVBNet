@@ -4,7 +4,7 @@ Imports FalzoniNetFVBNet.Presentation.Administrator.Clients.Interfaces.Configura
 Imports FalzoniNetFVBNet.Utils.Helpers
 
 Namespace Attributes
-    Public Class UserRegisterAttribute
+    Public Class UserConfigurationAttribute
         Inherits ActionFilterAttribute
 
         Public Overrides Sub OnActionExecuting(filterContext As ActionExecutingContext)
@@ -12,7 +12,7 @@ Namespace Attributes
 
             If HttpContext.Current.GetOwinContext().Authentication.User.Identity.IsAuthenticated Then
                 If filterContext.Controller.ViewBag.Perfis Is Nothing Then
-                    filterContext.Controller.ViewBag.Perfis = Task.Run(Async Function() Await roleClient.GetAllAsync(UrlConfigurationHelper.RoleGetAll)).Result
+                    filterContext.Controller.ViewBag.Perfis = Task.Run(Async Function() Await roleClient.GetAllAsync()).Result
                 End If
             End If
 

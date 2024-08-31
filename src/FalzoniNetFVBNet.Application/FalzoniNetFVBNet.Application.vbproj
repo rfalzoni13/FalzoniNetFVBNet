@@ -135,8 +135,6 @@
     <Compile Include="ServiceApplication\Configuration\UserServiceApplication.vb" />
     <Compile Include="ServiceApplication\Identity\AccountServiceApplication.vb" />
     <Compile Include="ServiceApplication\Identity\IdentityUtilityServiceApplication.vb" />
-    <Compile Include="ServiceApplication\Register\CustomerServiceApplication.vb" />
-    <Compile Include="ServiceApplication\Stock\ProductServiceApplication.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">

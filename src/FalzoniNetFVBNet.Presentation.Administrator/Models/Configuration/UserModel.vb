@@ -53,7 +53,7 @@ Namespace Models.Configuration
 
         'Methods
         Public Sub LoadProfilePhoto()
-            Me.PhotoPath = If(Not String.IsNullOrEmpty(PhotoPath), $"{UrlConfigurationHelper.PathUrl}\\{PhotoPath}", Me.PhotoPath)
+            Me.PhotoPath = If(Not String.IsNullOrEmpty(PhotoPath), $"{PathUtils.GetApiPath()}/{PhotoPath}", Me.PhotoPath)
         End Sub
     End Class
 End Namespace

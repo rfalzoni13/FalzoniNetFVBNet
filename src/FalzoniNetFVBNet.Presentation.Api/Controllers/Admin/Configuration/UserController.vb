@@ -10,7 +10,6 @@ Imports NLog
 
 Namespace Controllers.Admin.Configuration
     <CustomAuthorize(Roles:="Administrator")>
-    <RoutePrefix("Api/User")>
     Public Class UserController
         Inherits ApiController
 #Region "Attributes"
@@ -34,7 +33,6 @@ Namespace Controllers.Admin.Configuration
         ''' <remarks>Listagem de todos os usuarios</remarks>
         ''' <returns></returns>
         <HttpGet>
-        <Route("GetAll")>
         Public Function GetAll() As HttpResponseMessage
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try
@@ -63,7 +61,6 @@ Namespace Controllers.Admin.Configuration
         ''' <param name="Id">Id do usuário</param>
         ''' <returns></returns>
         <HttpGet>
-        <Route("Get")>
         Public Function [Get](Id As Guid) As HttpResponseMessage
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try
@@ -99,7 +96,6 @@ Namespace Controllers.Admin.Configuration
         ''' <param name="applicationUserRegisterModel">Objeto de registro usuário</param>
         ''' <returns></returns>
         <HttpPost>
-        <Route("Add")>
         Public Function Add(<FromBody> applicationUserRegisterModel As ApplicationUserRegisterModel) As HttpResponseMessage
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
 
@@ -137,7 +133,6 @@ Namespace Controllers.Admin.Configuration
         ''' <param name="applicationUserRegisterModel">Objeto de registro usuário</param>
         ''' <returns></returns>
         <HttpPost>
-        <Route("AddAsync")>
         Public Async Function AddAsync(<FromBody> applicationUserRegisterModel As ApplicationUserRegisterModel) As Task(Of HttpResponseMessage)
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
 
@@ -177,7 +172,6 @@ Namespace Controllers.Admin.Configuration
         ''' <param name="applicationUserRegisterModel">Objeto de registro do usuário</param>
         ''' <returns></returns>
         <HttpPut>
-        <Route("Update")>
         Public Function Update(<FromBody> applicationUserRegisterModel As ApplicationUserRegisterModel) As HttpResponseMessage
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
 
@@ -214,7 +208,6 @@ Namespace Controllers.Admin.Configuration
         ''' <remarks>Atualiza o usuário passando o objeto no body da requisição pelo método PUT de forma assíncrona</remarks>
         ''' <param name="applicationUserRegisterModel">Objeto de registro do usuário</param>
         <HttpPut>
-        <Route("UpdateAsync")>
         Public Async Function UpdateAsync(<FromBody> applicationUserRegisterModel As ApplicationUserRegisterModel) As Task(Of HttpResponseMessage)
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
 
@@ -251,19 +244,16 @@ Namespace Controllers.Admin.Configuration
         ''' <response code="401">Unauthorized</response>
         ''' <response code="500">Internal Server Error</response>
         ''' <remarks>Exclui o usuario passando o objeto no body da requisição pelo método DELETE</remarks>
-        ''' <param name="applicationUserRegisterModel">Objeto de registro do usuario</param>
+        ''' <param name="Id">Id do usuario</param>
         ''' <returns></returns>
         <HttpDelete>
-        <Route("Delete")>
-        Public Function Delete(<FromBody> applicationUserRegisterModel As ApplicationUserRegisterModel) As HttpResponseMessage
+        Public Function Delete(<FromUri> Id As String) As HttpResponseMessage
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try
                 If ModelState.IsValid Then
                     _logger.Info(action + " - Iniciado")
 
-                    Dim userDto = applicationUserRegisterModel.ConvertToDTO()
-
-                    _userServiceApplication.Delete(userDto)
+                    _userServiceApplication.Delete(Id)
 
                     _logger.Info(action + " - Sucesso!")
 
@@ -288,19 +278,16 @@ Namespace Controllers.Admin.Configuration
         ''' <response code="401">Unauthorized</response>
         ''' <response code="500">Internal Server Error</response>
         ''' <remarks>Exclui o usuario passando o objeto no body da requisição pelo método DELETE de forma assíncrona</remarks>
-        ''' <param name="applicationUserRegisterModel">Objeto de registro do usuario</param>
+        ''' <param name="Id">Id do usuario</param>
         ''' <returns></returns>
         <HttpDelete>
-        <Route("DeleteAsync")>
-        Public Async Function DeleteAsync(<FromBody> applicationUserRegisterModel As ApplicationUserRegisterModel) As Task(Of HttpResponseMessage)
+        Public Async Function DeleteAsync(<FromUri> Id As String) As Task(Of HttpResponseMessage)
             Dim action As String = Me.ActionContext.ActionDescriptor.ActionName
             Try
                 If ModelState.IsValid Then
                     _logger.Info(action + " - Iniciado")
 
-                    Dim userDto = applicationUserRegisterModel.ConvertToDTO()
-
-                    Await _userServiceApplication.DeleteAsync(userDto)
+                    Await _userServiceApplication.DeleteAsync(Id)
 
                     _logger.Info(action + " - Sucesso!")
 

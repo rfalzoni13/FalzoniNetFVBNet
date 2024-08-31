@@ -15,13 +15,15 @@ Namespace Clients.Register
 
         Public Sub New()
             MyBase.New()
+
+            url += "/User"
         End Sub
 
-        Public Overrides Async Function GetAsync(url As String, id As String) As Task(Of UserModel)
+        Public Overrides Async Function GetAsync(id As String) As Task(Of UserModel)
             Using client As New HttpClient()
                 client.DefaultRequestHeaders.Authorization = New System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token)
 
-                Dim response As HttpResponseMessage = Await client.GetAsync($"{url}?id={id}")
+                Dim response As HttpResponseMessage = Await client.GetAsync($"{url}/Get/{id}")
                 If response.IsSuccessStatusCode Then
                     Dim model = Await response.Content.ReadAsAsync(Of UserModel)()
 
@@ -36,14 +38,14 @@ Namespace Clients.Register
             End Using
         End Function
 
-        Public Async Function GetTableAsync(url As String) As Task(Of UserTableModel) Implements IUserClient.GetTableAsync
+        Public Async Function GetTableAsync() As Task(Of UserTableModel) Implements IUserClient.GetTableAsync
             Dim table = New UserTableModel()
 
             Try
                 Using client As New HttpClient()
                     client.DefaultRequestHeaders.Authorization = New System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token)
 
-                    Dim response As HttpResponseMessage = Await client.GetAsync(url)
+                    Dim response As HttpResponseMessage = Await client.GetAsync($"{url}/GetAll")
                     If response.IsSuccessStatusCode Then
                         Dim users = Await response.Content.ReadAsAsync(Of ICollection(Of UserModel))()
 
@@ -74,13 +76,13 @@ Namespace Clients.Register
             Return Await Task.FromResult(table)
         End Function
 
-        Public Overrides Function Add(url As String, obj As UserModel) As String
+        Public Overrides Function Add(obj As UserModel) As String
             Dim model = New ApplicationUserModel(obj)
 
             Using client As New HttpClient()
                 client.DefaultRequestHeaders.Authorization = New System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token)
 
-                Dim response As HttpResponseMessage = client.PostAsJsonAsync(url, model).Result
+                Dim response As HttpResponseMessage = client.PostAsJsonAsync($"{url}/Add", model).Result
                 If response.IsSuccessStatusCode Then
                     Return response.Content.ReadAsAsync(Of String)().Result
                 Else
@@ -91,13 +93,13 @@ Namespace Clients.Register
             End Using
         End Function
 
-        Public Overrides Function Update(url As String, obj As UserModel) As String
+        Public Overrides Function Update(obj As UserModel) As String
             Dim model = New ApplicationUserModel(obj)
 
             Using client As New HttpClient()
                 client.DefaultRequestHeaders.Authorization = New System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token)
 
-                Dim response As HttpResponseMessage = client.PutAsJsonAsync(url, model).Result
+                Dim response As HttpResponseMessage = client.PutAsJsonAsync($"{url}/Update", model).Result
                 If response.IsSuccessStatusCode Then
                     Dim retorno As String = response.Content.ReadAsAsync(Of String)().Result
                     Return retorno

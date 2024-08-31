@@ -10,12 +10,14 @@ Namespace Clients.Base
         Implements IBaseClient(Of T)
 
         Protected token As String
+        Protected url As String
 
         Public Sub New()
             token = RequestHelper.GetAccessToken()
+            url = PathUtils.GetApiPath()
         End Sub
 
-        Public Overridable Function Add(url As String, obj As T) As String Implements IBaseClient(Of T).Add
+        Public Overridable Function Add(obj As T) As String Implements IBaseClient(Of T).Add
             Using client As New HttpClient
                 client.DefaultRequestHeaders.Authorization = New Headers.AuthenticationHeaderValue("Bearer", token)
 
@@ -25,7 +27,7 @@ Namespace Clients.Base
             End Using
         End Function
 
-        Public Overridable Async Function AddAsync(url As String, obj As T) As Task(Of String) Implements IBaseClient(Of T).AddAsync
+        Public Overridable Async Function AddAsync(obj As T) As Task(Of String) Implements IBaseClient(Of T).AddAsync
             Using client As New HttpClient
                 client.DefaultRequestHeaders.Authorization = New Headers.AuthenticationHeaderValue("Bearer", token)
 
@@ -35,7 +37,7 @@ Namespace Clients.Base
             End Using
         End Function
 
-        Public Overridable Function Update(url As String, obj As T) As String Implements IBaseClient(Of T).Update
+        Public Overridable Function Update(obj As T) As String Implements IBaseClient(Of T).Update
             Using client As New HttpClient
                 client.DefaultRequestHeaders.Authorization = New Headers.AuthenticationHeaderValue("Bearer", token)
 
@@ -45,7 +47,7 @@ Namespace Clients.Base
             End Using
         End Function
 
-        Public Overridable Async Function UpdateAsync(url As String, obj As T) As Task(Of String) Implements IBaseClient(Of T).UpdateAsync
+        Public Overridable Async Function UpdateAsync(obj As T) As Task(Of String) Implements IBaseClient(Of T).UpdateAsync
             Using client As New HttpClient
                 client.DefaultRequestHeaders.Authorization = New Headers.AuthenticationHeaderValue("Bearer", token)
 
@@ -55,7 +57,7 @@ Namespace Clients.Base
             End Using
         End Function
 
-        Public Overridable Function Delete(url As String, obj As T) As String Implements IBaseClient(Of T).Delete
+        Public Overridable Function Delete(obj As T) As String Implements IBaseClient(Of T).Delete
             Using client As New HttpClient
                 client.DefaultRequestHeaders.Authorization = New Headers.AuthenticationHeaderValue("Bearer", token)
 
@@ -72,7 +74,7 @@ Namespace Clients.Base
             End Using
         End Function
 
-        Public Overridable Async Function DeleteAsync(url As String, obj As T) As Task(Of String) Implements IBaseClient(Of T).DeleteAsync
+        Public Overridable Async Function DeleteAsync(obj As T) As Task(Of String) Implements IBaseClient(Of T).DeleteAsync
             Using client As New HttpClient
                 client.DefaultRequestHeaders.Authorization = New Headers.AuthenticationHeaderValue("Bearer", token)
 
@@ -89,7 +91,7 @@ Namespace Clients.Base
             End Using
         End Function
 
-        Public Overridable Function [Get](url As String, id As String) As T Implements IBaseClient(Of T).Get
+        Public Overridable Function [Get](id As String) As T Implements IBaseClient(Of T).Get
             Using client As New HttpClient
                 client.DefaultRequestHeaders.Authorization = New Headers.AuthenticationHeaderValue("Bearer", token)
 
@@ -99,7 +101,7 @@ Namespace Clients.Base
             End Using
         End Function
 
-        Public Overridable Async Function GetAsync(url As String, id As String) As Task(Of T) Implements IBaseClient(Of T).GetAsync
+        Public Overridable Async Function GetAsync(id As String) As Task(Of T) Implements IBaseClient(Of T).GetAsync
             Using client As New HttpClient
                 client.DefaultRequestHeaders.Authorization = New Headers.AuthenticationHeaderValue("Bearer", token)
 
@@ -109,7 +111,7 @@ Namespace Clients.Base
             End Using
         End Function
 
-        Public Overridable Function GetAll(url As String) As ICollection(Of T) Implements IBaseClient(Of T).GetAll
+        Public Overridable Function GetAll() As ICollection(Of T) Implements IBaseClient(Of T).GetAll
             Using client As New HttpClient
                 client.DefaultRequestHeaders.Authorization = New Headers.AuthenticationHeaderValue("Bearer", token)
 
@@ -119,7 +121,7 @@ Namespace Clients.Base
             End Using
         End Function
 
-        Public Overridable Async Function GetAllAsync(url As String) As Task(Of ICollection(Of T)) Implements IBaseClient(Of T).GetAllAsync
+        Public Overridable Async Function GetAllAsync() As Task(Of ICollection(Of T)) Implements IBaseClient(Of T).GetAllAsync
             Using client As New HttpClient
                 client.DefaultRequestHeaders.Authorization = New Headers.AuthenticationHeaderValue("Bearer", token)
 
